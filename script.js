@@ -9,6 +9,7 @@ const AzkarApp = () => {
     const [newDua, setNewDua] = useState('');
     const [currentTime, setCurrentTime] = useState(new Date());
     const [completedAzkar, setCompletedAzkar] = useState({});
+    const [azkarProgress, setAzkarProgress] = useState({});
     const [preferences, setPreferences] = useState({
         morningTime: '06:00',
         eveningTime: '17:00',
@@ -420,11 +421,29 @@ const AzkarApp = () => {
         setCustomDuas(customDuas.filter((_, i) => i !== index));
     };
 
+    const handleZikrProgress = (id, count) => {
+        if (completedAzkar[id]) return;
+
+        setAzkarProgress(prev => {
+            const current = prev[id] || 0;
+            const next = current + 1;
+            
+            if (next >= count) {
+                setCompletedAzkar(comp => ({ ...comp, [id]: true }));
+            }
+            
+            return { ...prev, [id]: next };
+        });
+    };
+
     const toggleZikrComplete = (id) => {
-        setCompletedAzkar(prev => ({
-            ...prev,
-            [id]: !prev[id]
-        }));
+        setCompletedAzkar(prev => {
+            const isCompleted = !prev[id];
+            if (!isCompleted) {
+                setAzkarProgress(prog => ({ ...prog, [id]: 0 }));
+            }
+            return { ...prev, [id]: isCompleted };
+        });
     };
 
     const formatTime = () => {
@@ -458,16 +477,37 @@ const AzkarApp = () => {
                         {zikr.text}
                     </p>
 
-                    <div className="space-y-2 border-t pt-3">
-                        <div className="flex items-center gap-2">
-                            <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-semibold text-sm">
-                                التكرار: {zikr.count}×
-                            </span>
-                            {zikr.note && (
-                                <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm">
-                                    {zikr.note}
+                    <div className="space-y-4 border-t pt-4">
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div className="flex items-center gap-2">
+                                <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-semibold text-sm">
+                                    التكرار: {zikr.count}×
                                 </span>
-                            )}
+                                {zikr.note && (
+                                    <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm">
+                                        {zikr.note}
+                                    </span>
+                                )}
+                            </div>
+                            
+                            <button
+                                onClick={() => handleZikrProgress(zikr.id, zikr.count)}
+                                disabled={completedAzkar[zikr.id]}
+                                className={`w-full sm:w-auto px-8 py-3 rounded-xl font-bold text-lg transition-all active:scale-95 flex justify-center items-center gap-2 ${
+                                    completedAzkar[zikr.id]
+                                        ? 'bg-green-100 text-green-700'
+                                        : 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md hover:shadow-lg'
+                                }`}
+                            >
+                                {completedAzkar[zikr.id] ? (
+                                    <>
+                                        <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                                        <span>تم الانتهاء</span>
+                                    </>
+                                ) : (
+                                    <span>اضغط للعد: {azkarProgress[zikr.id] || 0} / {zikr.count}</span>
+                                )}
+                            </button>
                         </div>
 
                         <div className="bg-blue-50 rounded-lg p-3 border-r-2 border-blue-400">
