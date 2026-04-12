@@ -1,5 +1,5 @@
 const { useState, useEffect } = React;
-const { Clock, Moon, Sun, MapPin, Bell, BookOpen, Plus, Settings, Save, CheckCircle } = lucideReact;
+const { Clock, Moon, Sun, MapPin, Bell, BookOpen, Plus, Settings, Save, CheckCircle } = LucideReact;
 
 const AzkarApp = () => {
     const [activeTab, setActiveTab] = useState('morning');
