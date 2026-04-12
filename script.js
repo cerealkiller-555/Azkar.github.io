@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Clock, Moon, Sun, MapPin, Bell, BookOpen, Plus, Settings, Save, CheckCircle } from 'lucide-react';
+const { useState, useEffect } = React;
+const { Clock, Moon, Sun, MapPin, Bell, BookOpen, Plus, Settings, Save, CheckCircle } = lucideReact;
 
 const AzkarApp = () => {
     const [activeTab, setActiveTab] = useState('morning');
@@ -843,4 +843,6 @@ const AzkarApp = () => {
     );
 };
 
-export default AzkarApp;
+// Render the application
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<AzkarApp />);
