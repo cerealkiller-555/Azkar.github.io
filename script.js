@@ -450,12 +450,14 @@ const AzkarApp = () => {
         return currentTime.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
     };
 
-    const renderAzkarList = (azkarList) => (
+    const renderAzkarList = (azkarList, type) => (
         <div className="space-y-4">
-            {azkarList.map((zikr) => (
+            {azkarList.map((zikr) => {
+                const uniqueId = `${type}_${zikr.id}`;
+                return (
                 <div
-                    key={zikr.id}
-                    className={`bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all border-r-4 ${completedAzkar[zikr.id] ? 'border-green-500 bg-green-50' : 'border-emerald-500'
+                    key={uniqueId}
+                    className={`bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all border-r-4 ${completedAzkar[uniqueId] ? 'border-green-500 bg-green-50' : 'border-emerald-500'
                         }`}
                 >
                     <div className="flex items-start justify-between gap-3 mb-3">
@@ -463,8 +465,8 @@ const AzkarApp = () => {
                             <h3 className="text-lg font-bold text-emerald-700">{zikr.title}</h3>
                         )}
                         <button
-                            onClick={() => toggleZikrComplete(zikr.id)}
-                            className={`flex-shrink-0 p-2 rounded-lg transition-all ${completedAzkar[zikr.id]
+                            onClick={() => toggleZikrComplete(uniqueId)}
+                            className={`flex-shrink-0 p-2 rounded-lg transition-all ${completedAzkar[uniqueId]
                                     ? 'bg-green-500 text-white'
                                     : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
                                 }`}
@@ -491,21 +493,21 @@ const AzkarApp = () => {
                             </div>
                             
                             <button
-                                onClick={() => handleZikrProgress(zikr.id, zikr.count)}
-                                disabled={completedAzkar[zikr.id]}
+                                onClick={() => handleZikrProgress(uniqueId, zikr.count)}
+                                disabled={completedAzkar[uniqueId]}
                                 className={`w-full sm:w-auto px-8 py-3 rounded-xl font-bold text-lg transition-all active:scale-95 flex justify-center items-center gap-2 ${
-                                    completedAzkar[zikr.id]
+                                    completedAzkar[uniqueId]
                                         ? 'bg-green-100 text-green-700'
                                         : 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md hover:shadow-lg'
                                 }`}
                             >
-                                {completedAzkar[zikr.id] ? (
+                                {completedAzkar[uniqueId] ? (
                                     <>
                                         <CheckCircle className="w-5 h-5 flex-shrink-0" />
                                         <span>تم الانتهاء</span>
                                     </>
                                 ) : (
-                                    <span>اضغط للعد: {azkarProgress[zikr.id] || 0} / {zikr.count}</span>
+                                    <span>اضغط للعد: {azkarProgress[uniqueId] || 0} / {zikr.count}</span>
                                 )}
                             </button>
                         </div>
@@ -522,7 +524,7 @@ const AzkarApp = () => {
                         </div>
                     </div>
                 </div>
-            ))}
+            )})}
         </div>
     );
 
@@ -610,7 +612,7 @@ const AzkarApp = () => {
                                 </h2>
                                 <p className="text-amber-50">ابدأ يومك بذكر الله - من صحيح السنة</p>
                             </div>
-                            {renderAzkarList(morningAzkar)}
+                            {renderAzkarList(morningAzkar, 'morning')}
                         </div>
                     )}
 
@@ -623,7 +625,7 @@ const AzkarApp = () => {
                                 </h2>
                                 <p className="text-indigo-100">اختم يومك بذكر الله - من صحيح السنة</p>
                             </div>
-                            {renderAzkarList(eveningAzkar)}
+                            {renderAzkarList(eveningAzkar, 'evening')}
                         </div>
                     )}
 
