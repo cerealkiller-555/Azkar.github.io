@@ -440,6 +440,18 @@ const AzkarApp = () => {
                             </div>
 
                             <button
+                                onClick={() => handleTabChange("settings")}
+                                className={`p-2.5 rounded-xl transition-all border ${
+                                    activeTab === "settings"
+                                        ? "bg-slate-200 dark:bg-emerald-500/30 text-emerald-600 dark:text-emerald-300 border-slate-300 dark:border-emerald-500/40 shadow-sm"
+                                        : "bg-slate-50 dark:bg-emerald-500/10 text-slate-500 dark:text-emerald-400 border-slate-200/70 dark:border-emerald-500/20 hover:scale-105 active:scale-95"
+                                }`}
+                                aria-label="Settings"
+                            >
+                                <Settings className="w-5 h-5" />
+                            </button>
+                            
+                            <button
                                 onClick={toggleDarkMode}
                                 className="p-2.5 rounded-xl bg-slate-50 dark:bg-emerald-500/10 text-slate-500 dark:text-emerald-400 border border-slate-200/70 dark:border-emerald-500/20 hover:scale-105 active:scale-95 transition-all"
                                 aria-label={isDarkMode ? t.lightOn : t.darkOn}
@@ -460,7 +472,7 @@ const AzkarApp = () => {
             <div className="hidden md:block container mx-auto px-4 py-6">
                 <div className="max-w-3xl mx-auto">
                     <div className="p-1.5 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50 flex gap-1 overflow-x-auto no-scrollbar scroll-smooth">
-                        {tabs.map((tab) => (
+                        {tabs.filter(tab => tab.id !== "settings").map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => handleTabChange(tab.id)}
@@ -543,7 +555,7 @@ const AzkarApp = () => {
             </footer>
 
             <nav className="bottom-nav" role="navigation" aria-label={t.navLabel}>
-                {tabs.map((tab) => (
+                {tabs.filter(tab => tab.id !== "settings").map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => handleTabChange(tab.id)}
