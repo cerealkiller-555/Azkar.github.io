@@ -1,15 +1,18 @@
 # Azkar App (تطبيق الأذكار)
 
-A comprehensive React-based web application for daily Islamic invocations (Azkar), prayer times, and more. The application features a beautiful, dynamic Arabic user interface (RTL) built with React and Tailwind CSS.
+A comprehensive React-based web application for daily Islamic invocations (Azkar), prayer times, and more. The application features a modern Arabic-first UI with optional English mode, built with React and Tailwind CSS.
 
 ## Features
 
-- 🌅 **Morning Azkar (أذكار الصباح):** A curated list of authentic morning invocations with counters, benefits (virtues), and sources.
+- 🌅 **Morning Azkar (أذكار الصباح):** A curated list of authentic morning invocations with counters, benefits, and sources.
 - 🌙 **Evening Azkar (أذكار المساء):** Authentic evening invocations with progress tracking.
-- 🕌 **Prayer Times (مواقيت الصلاة):** Fetches accurate daily prayer times based on the user's geographical location using the Aladhan API.
-- 🤲 **Custom Duas (أدعية مخصصة):** Allows users to add, manage, and delete their own personal supplications.
-- ⚙️ **Settings & Preferences:** Users can customize daily notification times and update their default location (city/country) for accurate prayer times.
-- ✅ **Progress Tracking:** Clickable check buttons to mark individual azkar as completed.
+- 🕌 **Prayer Times (مواقيت الصلاة):** Fetches accurate daily prayer times based on the user's location using the Aladhan API.
+- ✅ **Prayer Checklist:** Track the five daily prayers alongside prayer times.
+- 🔥 **Streaks:** Builds a daily streak when morning azkar, evening azkar, and the five prayers are completed.
+- 🤲 **Custom Duas (أدعية مخصصة):** Add, manage, and delete personal supplications.
+- 🔐 **Login:** Simple local login to save user info on the device.
+- 🌍 **Language Toggle:** Switch between Arabic and English in settings.
+- ⚙️ **Settings & Preferences:** Update default location, appearance, and profile info.
 
 ## Technologies Used
 
@@ -21,15 +24,13 @@ A comprehensive React-based web application for daily Islamic invocations (Azkar
 ## Getting Started
 
 1. Clone or download the repository.
-2. If this is a standalone component, integrate it into your React project.
-3. Install the required dependencies:
+2. Run a local web server from the project folder:
    ```bash
-   npm install lucide-react react
+   python3 -m http.server 8080
    ```
-   *(Ensure Tailwind CSS is correctly set up in your project environment)*
-4. Import and use the `AzkarApp` component.
+3. Open `http://localhost:8080` in your browser.
 
 ## Future Enhancements
-- Save user progress and preferences to `localStorage`.
-- Implement actual push notifications based on times selected in settings.
-- Add audio recitations for Azkar.
+- Push notifications for prayer times and azkar reminders.
+- Cloud sync for user profiles and streaks.
+- Audio recitations for azkar.

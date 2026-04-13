@@ -1,0 +1,17 @@
+{
+  "name": "azkar_app",
+  "version": "1.0.0",
+  "description": "A comprehensive React-based web application for daily Islamic invocations (Azkar), prayer times, and more. The application features a modern Arabic-first UI with optional English mode, built with React and Tailwind CSS.",
+  "main": "boot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lucide-react": "^1.8.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  }
+}

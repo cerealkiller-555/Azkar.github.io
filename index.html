@@ -19,7 +19,7 @@
     <link rel="icon" type="image/png" href="azkari_logo.png">
     <link rel="apple-touch-icon" href="azkari_logo.png">
 
-    <!-- Custom Styles -->3. تصميم الأيقونات المتنوعة (مثل الصورة 4)
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css">
 
     <!-- Tailwind CSS (local for offline support) -->
@@ -41,19 +41,9 @@
     <!-- React Root -->
     <div id="root"></div>
 
-    <!-- Application Script -->
+    <script src="data/azkar-data.js"></script>
     <script type="text/babel" src="script.js"></script>
-
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('✅ Service Worker registered:', reg.scope))
-                    .catch(err => console.log('❌ Service Worker registration failed:', err));
-            });
-        }
-    </script>
+    <script src="boot.js"></script>
 </body>
 
 </html>
