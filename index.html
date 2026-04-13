@@ -20,30 +20,17 @@
     <link rel="apple-touch-icon" href="azkari_logo.png">
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="style.css">
 
-    <!-- Tailwind CSS (local for offline support) -->
-    <script src="vendor/tailwind.js"></script>
 
-    <!-- React 18 (local for offline support) -->
-    <script src="vendor/react.production.min.js"></script>
-    <script src="vendor/react-dom.production.min.js"></script>
-    <script>window.react = window.React;</script>
-
-    <!-- Lucide React Icons (local for offline support) -->
-    <script src="vendor/lucide-react.js"></script>
-
-    <!-- Babel for transpiling JSX (local for offline support) -->
-    <script src="vendor/babel.min.js"></script>
 </head>
 
 <body class="bg-gray-50">
     <!-- React Root -->
     <div id="root"></div>
 
-    <script src="data/azkar-data.js"></script>
-    <script type="text/babel" src="script.js"></script>
-    <script src="boot.js"></script>
+    <script src="/data/azkar-data.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
+    <script src="/boot.js"></script>
 </body>
 
 </html>
