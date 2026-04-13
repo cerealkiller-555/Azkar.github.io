@@ -309,8 +309,19 @@ html {
 @media (max-width: 767px) {
     .bottom-nav {
         display: flex;
-        justify-content: space-around;
+        justify-content: flex-start;
         align-items: center;
+        overflow-x: auto;
+        gap: 6px;
+        padding-left: 12px;
+        padding-right: 12px;
+        scroll-behavior: smooth;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+    
+    .bottom-nav::-webkit-scrollbar {
+        display: none;
     }
 
     /* Add safe bottom padding to body so content doesn't get hidden behind bottom nav */
@@ -343,7 +354,8 @@ html {
     font-weight: 700;
     transition: all 0.3s ease;
     position: relative;
-    min-width: 60px;
+    min-width: 68px;
+    flex-shrink: 0;
 }
 
 .bottom-nav-item.active {

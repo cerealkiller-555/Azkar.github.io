@@ -225,72 +225,49 @@ window.AZKAR_DATA = {
 
                 source: "الترمذي",
                 sourceEn: "al-Tirmidhi",
-
                 grade: "صحيح",
                 gradeEn: "Sahih"
             },
             {
                 id: 18,
-
                 text: "لا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-
                 count: 100,
-
                 benefit: "من قالها مائة مرة في يوم كُتب له أجر عتق عشر رقاب، وكُتبت له مائة حسنة، ومُحي عنه مائة سيئة، وكانت له حرزًا من الشيطان طوال يومه، ولم يأت أحد بأفضل مما جاء به إلا من زاد عليه",
-
                 benefitEn: "Whoever says it 100 times in a day gets the reward of freeing ten slaves, 100 good deeds, 100 sins erased, protection from Satan for the whole day, and no one comes with better reward except someone who does more",
-
                 source: "البخاري و مسلم",
                 sourceEn: "Al-Bukhari and Muslim",
-
                 grade: "صحيح",
                 gradeEn: "Sahih"
             },
             {
                 id: 19,
-
                 text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ",
-
                 count: 1,
-
                 source: "مسلم",
                 sourceEn: "Kitab al-Tawhid by Ibn Khuzaymah",
-
                 grade: "صحيح",
                 gradeEn: "Sahih"
             },
             {
                 id: 19,
-
                 text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا",
-
                 count: 1,
-
                 benefit: "دعاء يطلب فيه المسلم من الله العلم النافع، والرزق الطيب الحلال، والعمل الصالح المقبول",
-
                 benefitEn: "A supplication asking Allah for beneficial knowledge, good lawful provision, and accepted righteous deeds",
-
                 source: "ابن ماجه",
                 sourceEn: " Ibn Majah",
-
                 grade: "حسن",
                 gradeEn: ""
 
             },
             {
                 id: 20,
-
                 text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
-
                 count: 100,
-
                 benefit: "حثّ النبي ﷺ على التوبة والاستغفار المستمر، وأنه كان يتوب إلى الله في اليوم مائة مرة، مما يدل على فضل كثرة التوبة والرجوع إلى الله",
-
                 benefitEn: "The Prophet ﷺ urged people to repent to Allah, and he himself used to repent to Him 100 times a day, showing the virtue of frequent repentance",
-
                 source: "مسلم",
                 sourceEn: "Sahih Muslim",
-
                 grade: "صحيح",
                 gradeEn: "Sahih"
 
@@ -350,10 +327,10 @@ window.AZKAR_DATA = {
 
             {
                 id: 5,
-                text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيرَ مَا بَعْدَهُ ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",
+                text: "أمسَينا وأمسى الْمُلْكُ لِلَّهِ ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَهَ إلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيرَ مَا بَعْدَهُ ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الْكَسَلِ وَسُوءِ الْكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ",
                 count: 1,
-                meaning: "أصبحنا: دخلنا في الصباح متلبسين بنعمة وحفظ من الله تعالى. وأصبح الملك: دوام الملك والتصرف لله تعالى. رب: يا رب. وخير ما في هذا اليوم: خيرات الدنيا والآخرة التي تقع فيه. وخير ما بعده: طلب خيرات ما يأتي بعد هذا اليوم. ومن الكسل: عدم انبعاث النفس لفعل الخير مع القدرة عليه. وسوء الكِبَر: ما يترتب على كِبَر السن من ضعف العقل واضطراب الرأي. وأعوذ بك من عذاب في النار وعذاب في القبر: تخصيصهما لشدة أمرهما وعِظم شأنهما من بين عذاب الآخرة",
-                meaningEn: "We have entered the morning and the dominion belongs to Allah, and all praise is due to Allah. There is no god but Allah alone, with no partner or associate. To Him belongs the dominion, and to Him belongs all praise, and He is over all things competent. O Lord, I ask You for the best of what is in this day and the best of what comes after it, and I seek refuge in You from the evil of what is in this day and the evil of what comes after it. O Lord, I seek refuge in You from laziness and the evil of old age. O Lord, I seek refuge in You from the torment of the Fire and the torment of the grave.",
+                meaning: "أمسَينا: دخلنا في المساء متلبسين بنعمة وحفظ من الله تعالى. وأمسى الملك: دوام الملك والتصرف لله تعالى. رب: يا رب. وخير ما في هذا اليوم: خيرات الدنيا والآخرة التي تقع فيه. وخير ما بعده: طلب خيرات ما يأتي بعد هذا اليوم. ومن الكسل: عدم انبعاث النفس لفعل الخير مع القدرة عليه. وسوء الكِبَر: ما يترتب على كِبَر السن من ضعف العقل واضطراب الرأي. وأعوذ بك من عذاب في النار وعذاب في القبر: تخصيصهما لشدة أمرهما وعِظم شأنهما من بين عذاب الآخرة",
+                meaningEn: "We have entered the evening and the dominion belongs to Allah, and all praise is due to Allah. There is no god but Allah alone, with no partner or associate. To Him belongs the dominion, and to Him belongs all praise, and He is over all things competent. O Lord, I ask You for the best of what is in this day and the best of what comes after it, and I seek refuge in You from the evil of what is in this day and the evil of what comes after it. O Lord, I seek refuge in You from laziness and the evil of old age. O Lord, I seek refuge in You from the torment of the Fire and the torment of the grave.",
                 source: "صحيح مسلم",
                 sourceEn: "Sahih Muslim",
                 grade: "صحيح",
@@ -438,38 +415,25 @@ window.AZKAR_DATA = {
             }
             ,
             {
-
                 id: 14,
-
                 text: "رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ نَبِيًّا",
-
                 count: 3,
-
                 meaning: "رضيت بالله ربًا أي قنعت به سبحانه وتعالى واكتفيت به ولم أطلب معه غيره، فهو المعبود الحق. وبالإسلام دينًا أي اخترت الإسلام والتزمت به ولم أطلب غيره من الأديان، وهو الدين الذي ارتضاه الله. وبمحمد نبيًا أي آمنت به واتبعته ورضيت برسالته",
-
                 benefit: "من قالها ثلاث مرات وجبت له الجنة، ورضي الله عنه وأرضاه",
-
                 benefitEn: "Whoever says it three times, Paradise becomes obligatory for him and Allah is pleased with him",
-
                 source: "ابو داود ومسلم والنسائي",
                 sourceEn: "Abu Dawood and Muslim and Al-Nasa'i",
-
                 grade: "صحيح",
                 gradeEn: "Sahih"
             },
             {
                 id: 15,
                 text: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ",
-
                 count: 1,
-
                 meaning: "يا حي يا قيوم أي يا الدائم البقاء القائم على شؤون خلقه. برحمتك أستغيث أي أطلب رحمتك وعونك. أصلح لي شأني كله أي أصلح حالي وأموري كلها. ولا تكلني إلى نفسي طرفة عين أي لا تتركني لنفسي لحظة أو أقل من ذلك",
-
-
                 meaningEn: "O Ever-Living, O Self-Subsisting by Whom all existence depends, by Your mercy I seek help. Rectify for me all my affairs and do not entrust me to myself for even the blink of an eye.",
                 source: "النسائي",
                 sourceEn: "Al-Nasa'i",
-
                 grade: "حسن",
                 gradeEn: "Hasan"
             },

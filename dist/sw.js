@@ -1,4 +1,4 @@
-const CACHE_NAME = 'azkar-app-v2';
+const CACHE_NAME = 'azkar-app-v3';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -52,6 +52,22 @@ self.addEventListener('fetch', (event) => {
                     // If network fails, try cache
                     return caches.match(event.request);
                 })
+        );
+        return;
+    }
+
+    // For data file, try network first so updates are shown, fallback to cache
+    if (event.request.url.includes('azkar-data.js')) {
+        event.respondWith(
+            fetch(event.request)
+                .then((response) => {
+                    const responseClone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, responseClone);
+                    });
+                    return response;
+                })
+                .catch(() => caches.match(event.request))
         );
         return;
     }

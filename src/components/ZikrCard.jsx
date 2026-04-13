@@ -11,11 +11,18 @@ const ZikrCard = ({
     isExpanded,
     progressPct,
     isAnimating,
+    language,
     onToggleBenefit,
     onToggleComplete,
     onProgress
 }) => {
     const buttonRef = useRef(null);
+
+    const isEn = language === "en";
+    const title = isEn && zikr.titleEn ? zikr.titleEn : zikr.title;
+    const benefit = isEn && zikr.benefitEn ? zikr.benefitEn : zikr.benefit;
+    const meaning = isEn && zikr.meaningEn ? zikr.meaningEn : zikr.meaning;
+    const source = isEn && zikr.sourceEn ? zikr.sourceEn : zikr.source;
 
     return (
         <div
@@ -43,15 +50,15 @@ const ZikrCard = ({
                         }`}>
                             {isCompleted ? <CheckCircle className="w-5 h-5" /> : index + 1}
                         </div>
-                        {zikr.title && (
-                            <h3 className="text-lg font-extrabold text-emerald-700 dark:text-emerald-400 truncate">{zikr.title}</h3>
+                        {title && (
+                            <h3 className="text-lg font-extrabold text-emerald-700 dark:text-emerald-400 truncate">{title}</h3>
                         )}
                     </div>
 
                     <div className="flex items-center gap-1.5 flex-shrink-0">
                         <button
                             onClick={() => {
-                                const shareText = `${zikr.title ? `${zikr.title}\n` : ""}${zikr.text}\n\n${t.appName}`;
+                                const shareText = `${title ? `${title}\n` : ""}${zikr.text}\n\n${t.appName}`;
                                 if (navigator.share) {
                                     navigator.share({ title: t.appName, text: shareText });
                                 } else if (navigator.clipboard) {
@@ -122,7 +129,7 @@ const ZikrCard = ({
                     </div>
                 </div>
 
-                {(zikr.benefit || zikr.source) && (
+                {(benefit || source || meaning) && (
                     <div>
                         <button
                             onClick={onToggleBenefit}
@@ -135,31 +142,31 @@ const ZikrCard = ({
 
                         {isExpanded && (
                             <div className="mt-3 space-y-2 animate-slide-up">
-                                {zikr.benefit && (
+                                {benefit && (
                                     <div className="flex gap-3 p-3 rounded-xl bg-blue-50/60 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/20">
                                         <div className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-500 h-fit flex-shrink-0">
                                             <Info className="w-3.5 h-3.5" />
                                         </div>
-                                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{zikr.benefit}</p>
+                                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{benefit}</p>
                                     </div>
                                 )}
-                                {zikr.meaning && (
+                                {meaning && (
                                     <div className="flex gap-3 p-3 rounded-xl bg-emerald-50/60 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/20">
                                         <div className="p-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 h-fit flex-shrink-0">
                                             <BookOpen className="w-3.5 h-3.5" />
                                         </div>
                                         <div>
                                             <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 mb-1 uppercase tracking-wider">{t.meaningTitle}</p>
-                                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{zikr.meaning}</p>
+                                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{meaning}</p>
                                         </div>
                                     </div>
                                 )}
-                                {zikr.source && (
+                                {source && (
                                     <div className="flex gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-700/40">
                                         <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 h-fit flex-shrink-0">
                                             <CheckCircle className="w-3.5 h-3.5" />
                                         </div>
-                                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed italic">{zikr.source}</p>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed italic">{source}</p>
                                     </div>
                                 )}
                             </div>

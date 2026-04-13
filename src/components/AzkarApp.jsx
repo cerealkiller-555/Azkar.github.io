@@ -355,6 +355,7 @@ const AzkarApp = () => {
                         zikr={zikr}
                         index={index}
                         t={t}
+                        language={language}
                         isCompleted={isCompleted}
                         progress={progress}
                         isExpanded={isExpanded}
@@ -458,12 +459,12 @@ const AzkarApp = () => {
 
             <div className="hidden md:block container mx-auto px-4 py-6">
                 <div className="max-w-3xl mx-auto">
-                    <div className="p-1.5 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50 flex gap-1">
+                    <div className="p-1.5 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50 flex gap-1 overflow-x-auto no-scrollbar scroll-smooth">
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => handleTabChange(tab.id)}
-                                className={`flex items-center gap-2.5 px-5 py-3 rounded-xl transition-all duration-300 flex-1 font-bold text-sm ${
+                                className={`flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl transition-all duration-300 whitespace-nowrap whitespace-nowrap font-bold text-sm ${
                                     activeTab === tab.id
                                         ? `bg-gradient-to-br ${tab.color} text-white shadow-lg scale-[1.02]`
                                         : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900"
