@@ -20,7 +20,7 @@ const PrayerChecklist = ({ checklist, onToggle, language, t }) => (
                         onClick={() => onToggle(prayer.id)}
                         className={`p-3 rounded-2xl border text-sm font-bold transition-all ${
                             checked
-                                ? "bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-200/40"
+                                ? "bg-[#423E87] text-white border-[#423E87] shadow-md shadow-[#423E87]/20"
                                 : "bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-300 border-slate-200 dark:border-slate-700"
                         }`}
                     >

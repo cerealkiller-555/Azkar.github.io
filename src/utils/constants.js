@@ -17,7 +17,7 @@ export const PRAYER_CHECKLIST = [
 
 export const I18N = {
     ar: {
-        appName: "أذكاري",
+        appName: "حصنك",
         appTagline: "الحِصن المنيع للمسلم",
         loginTitle: "تسجيل الدخول",
         loginSubtitle: "احفظ بياناتك وتقدمك على هذا الجهاز",
@@ -93,7 +93,7 @@ export const I18N = {
         meaningTitle: "شرح ومعاني الكلمات"
     },
     en: {
-        appName: "Azkar",
+        appName: "Hesnok",
         appTagline: "Your daily spiritual companion",
         loginTitle: "Sign In",
         loginSubtitle: "Save your info and progress on this device",

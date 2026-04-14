@@ -5,9 +5,9 @@ import { showToast, readJson, readDailyState, dateKey, isSameDay, isYesterday, s
 
 const CustomDuasSection = ({ customDuas, newDua, setNewDua, addCustomDua, deleteCustomDua, t }) => (
     <div className="animate-slide-up space-y-6">
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-700 text-white shadow-xl">
+        <div className="p-6 rounded-2xl bg-gradient-to-br from-[#CC6243] translate-z-0 to-[#B45FA0] text-white shadow-xl">
             <h2 className="text-2xl font-black mb-1 flex items-center gap-3">
-                <Heart className="w-7 h-7 text-rose-300" />
+                <Heart className="w-7 h-7 text-white/70" />
                 {t.customTitle}
             </h2>
             <p className="opacity-70 text-sm font-medium">{t.customSubtitle}</p>
@@ -25,7 +25,7 @@ const CustomDuasSection = ({ customDuas, newDua, setNewDua, addCustomDua, delete
             />
             <button
                 onClick={addCustomDua}
-                className="px-6 py-3 bg-indigo-600 text-white font-black text-sm rounded-xl hover:bg-indigo-500 shadow-md transition-all active:scale-95"
+                className="px-6 py-3 bg-[#CC6243] text-white font-black text-sm rounded-xl hover:bg-[#B45FA0] shadow-md transition-all active:scale-95"
                 id="add-dua-btn"
                 aria-label={t.addDua}
             >

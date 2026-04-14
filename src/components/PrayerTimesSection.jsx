@@ -16,12 +16,12 @@ const formatTime12Hour = (timeStr, language) => {
 
 const PrayerTimesSection = ({ prayerTimes, location, t, language }) => {
     const prayerCards = [
-        { name: language === "en" ? "Fajr" : "الفجر", key: "Fajr", icon: "🌅", color: "from-blue-600 to-indigo-600" },
-        { name: language === "en" ? "Sunrise" : "الشروق", key: "Sunrise", icon: "☀️", color: "from-amber-400 to-orange-500" },
-        { name: language === "en" ? "Dhuhr" : "الظهر", key: "Dhuhr", icon: "🌞", color: "from-yellow-400 to-amber-500" },
-        { name: language === "en" ? "Asr" : "العصر", key: "Asr", icon: "🌤️", color: "from-orange-500 to-red-500" },
-        { name: language === "en" ? "Maghrib" : "المغرب", key: "Maghrib", icon: "🌆", color: "from-purple-600 to-pink-600" },
-        { name: language === "en" ? "Isha" : "العشاء", key: "Isha", icon: "🌙", color: "from-indigo-700 to-slate-900" }
+        { name: language === "en" ? "Fajr" : "الفجر", key: "Fajr", icon: "🌅", color: "from-[#423E87] to-[#2E2A5E]" },
+        { name: language === "en" ? "Sunrise" : "الشروق", key: "Sunrise", icon: "☀️", color: "from-[#D4A76A] to-[#B18F67]" },
+        { name: language === "en" ? "Dhuhr" : "الظهر", key: "Dhuhr", icon: "🌞", color: "from-[#EAA023] to-[#D4A76A]" },
+        { name: language === "en" ? "Asr" : "العصر", key: "Asr", icon: "🌤️", color: "from-[#B18F67] to-[#8C6F54]" },
+        { name: language === "en" ? "Maghrib" : "المغرب", key: "Maghrib", icon: "🌆", color: "from-[#CC6243] to-[#8C4B39]" },
+        { name: language === "en" ? "Isha" : "العشاء", key: "Isha", icon: "🌙", color: "from-[#1a1a2e] to-[#423E87]" }
     ];
 
     return (
@@ -50,7 +50,7 @@ const PrayerTimesSection = ({ prayerTimes, location, t, language }) => {
                     </div>
                 )) : (
                     <div className="col-span-full py-16 text-center">
-                        <div className="inline-block w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4" />
+                        <div className="inline-block w-8 h-8 border-4 border-[#D4A76A] border-t-transparent rounded-full animate-spin mb-4" />
                         <p className="text-slate-400 font-bold">{t.prayerTimesLoading}</p>
                     </div>
                 )}

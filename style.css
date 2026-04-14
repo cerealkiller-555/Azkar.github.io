@@ -2,17 +2,19 @@
 @import "tailwindcss";
 
 :root {
-    --primary: #10b981;
-    --primary-dark: #059669;
-    --primary-glow: rgba(16, 185, 129, 0.25);
-    --secondary: #6366f1;
-    --accent: #f59e0b;
-    --bg-light: #f8fafc;
-    --bg-dark: #0a0f1e;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --card-shadow: 0 4px 32px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
-    --card-shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+    --primary: #D4A76A; /* Patina Gold */
+    --primary-dark: #B18F67; /* Natural Wood */
+    --primary-glow: rgba(212, 167, 106, 0.25);
+    --secondary: #423E87; /* Islamic Navy */
+    --accent: #FFB800; /* Bright Gold */
+    --bg-light: #EADEC9; /* Light Birch */
+    --bg-dark: #1a1a2e;
+    --text-main: #423E87; /* Islamic Navy */
+    --text-muted: #7c7c9f;
+    --card-shadow: 0 4px 32px rgba(66, 62, 135, 0.08), 0 1px 4px rgba(66, 62, 135, 0.04);
+    --card-shadow-hover: 0 12px 48px rgba(66, 62, 135, 0.15), 0 2px 8px rgba(66, 62, 135, 0.1);
+    --sandstone: #B2AE97;
+    --terracotta: #CC6243;
 }
 
 * {
@@ -227,17 +229,17 @@ html {
 }
 
 .toast-success {
-    background: rgba(16, 185, 129, 0.95);
-    color: white;
+    background: rgba(66, 62, 135, 0.95); /* Islamic Navy */
+    color: #D4A76A; /* Patina Gold text */
 }
 
 .toast-info {
-    background: rgba(99, 102, 241, 0.95);
-    color: white;
+    background: rgba(212, 167, 106, 0.95); /* Patina Gold */
+    color: #423E87; /* Islamic Navy text */
 }
 
 .toast-warning {
-    background: rgba(245, 158, 11, 0.95);
+    background: rgba(204, 98, 67, 0.95); /* Terracotta */
     color: white;
 }
 
@@ -254,13 +256,13 @@ html {
     height: 52px;
     border-radius: 50%;
     border: none;
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
+    background: linear-gradient(135deg, #423E87, #2E2A5E);
+    color: #D4A76A;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 20px rgba(66, 62, 135, 0.4);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     opacity: 0;
     transform: translateY(20px) scale(0.8);
@@ -275,7 +277,7 @@ html {
 
 .scroll-top-btn:hover {
     transform: translateY(-3px) scale(1.1);
-    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+    box-shadow: 0 8px 30px rgba(66, 62, 135, 0.5);
 }
 
 .scroll-top-btn:active {
@@ -359,7 +361,7 @@ html {
 }
 
 .bottom-nav-item.active {
-    color: #10b981;
+    color: #423E87;
 }
 
 .bottom-nav-item.active::before {
@@ -371,7 +373,7 @@ html {
     width: 24px;
     height: 3px;
     border-radius: 99px;
-    background: linear-gradient(to right, #10b981, #059669);
+    background: linear-gradient(to right, #D4A76A, #B18F67);
 }
 
 .bottom-nav-item svg {
@@ -456,7 +458,7 @@ html {
     border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #059669; 
+    background: #423E87; 
 }
 
 /* ============================================
@@ -535,7 +537,7 @@ html {
    ============================================ */
 
 .text-gradient-emerald {
-    background: linear-gradient(135deg, #10b981, #059669);
+    background: linear-gradient(135deg, #D4A76A, #B18F67);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -554,7 +556,7 @@ html {
 
 /* Focus visible styles for accessibility */
 button:focus-visible, input:focus-visible {
-    outline: 2px solid #10b981;
+    outline: 2px solid #D4A76A;
     outline-offset: 2px;
 }
 

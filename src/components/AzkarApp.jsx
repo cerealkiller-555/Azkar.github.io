@@ -269,46 +269,31 @@ const AzkarApp = () => {
         setCountAnimation(id);
         window.setTimeout(() => setCountAnimation(null), 300);
 
-        setAzkarProgress((prev) => {
-            const nextCount = (prev[id] || 0) + 1;
-            const cappedCount = Math.min(nextCount, count);
-            return { ...prev, [id]: cappedCount };
-        });
+        const currentCount = azkarProgress[id] || 0;
+        const nextCount = currentCount + 1;
+        const cappedCount = Math.min(nextCount, count);
 
-        // Handle completion check separately to avoid side effects in updater
-        setAzkarProgress((prev) => {
-            if (prev[id] >= count) {
-                setCompletedAzkar((current) => {
-                    if (current[id]) return current;
-                    showToast(t.progressCompleted);
-                    if (navigator.vibrate) {
-                        navigator.vibrate([100, 50, 100]);
-                    }
-                    return { ...current, [id]: true };
-                });
-            }
-            return prev;
-        });
-    }, [completedAzkar, t]);
+        setAzkarProgress((prev) => ({ ...prev, [id]: cappedCount }));
+
+        if (cappedCount >= count) {
+            setCompletedAzkar((current) => {
+                if (current[id]) return current;
+                showToast(t.progressCompleted);
+                if (navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+                return { ...current, [id]: true };
+            });
+        }
+    }, [azkarProgress, completedAzkar, t]);
 
     const toggleZikrComplete = useCallback((id, count) => {
-        setCompletedAzkar((prev) => {
-            const nextCompleted = !prev[id];
-            
-            // We can't call setAzkarProgress inside the updater reliably for side effects,
-            // but we can call it after or use a separate effect.
-            // Since we want specific logic, we'll call it separately.
-            showToast(nextCompleted ? t.progressCompleted : t.progressResetOne, nextCompleted ? "success" : "info");
-            return { ...prev, [id]: nextCompleted };
-        });
+        const nextCompleted = !completedAzkar[id];
         
-        setAzkarProgress((current) => {
-            const isNowCompleted = !completedAzkar[id];
-            return {
-                ...current,
-                [id]: isNowCompleted ? count : 0
-            };
-        });
+        setCompletedAzkar((prev) => ({ ...prev, [id]: nextCompleted }));
+        setAzkarProgress((prev) => ({ ...prev, [id]: nextCompleted ? count : 0 }));
+        
+        showToast(nextCompleted ? t.progressCompleted : t.progressResetOne, nextCompleted ? "success" : "info");
     }, [completedAzkar, t]);
 
     const resetAllProgress = useCallback(() => {
@@ -417,10 +402,10 @@ const AzkarApp = () => {
                 <div className="container mx-auto px-4 py-3 md:py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3 group">
-                            <img src="azkari_logo.png" alt="أذكاري" className="w-10 h-10 md:w-12 md:h-12 object-contain transition-transform duration-300 group-hover:scale-110 drop-shadow-md" />
+                            <img src="hesnok_logo.jpg" alt="حصنك" className="w-10 h-10 md:w-12 md:h-12 object-contain transition-transform duration-300 group-hover:scale-110 drop-shadow-md" />
                             <div>
-                                <h1 className="text-lg md:text-2xl font-black text-slate-800 dark:text-white tracking-tight leading-tight">{t.appName}</h1>
-                                <p className="text-[10px] md:text-xs text-emerald-600 dark:text-emerald-400 font-bold leading-tight">{t.appTagline}</p>
+                                <h1 className="text-lg md:text-2xl font-black text-[#423E87] dark:text-[#D4A76A] tracking-tight leading-tight">{t.appName}</h1>
+                                <p className="text-[10px] md:text-xs text-[#B18F67] dark:text-[#B2AE97] font-bold leading-tight">{t.appTagline}</p>
                             </div>
                         </div>
 
@@ -439,18 +424,6 @@ const AzkarApp = () => {
                                 <span>{isOffline ? t.offline : t.online}</span>
                             </div>
 
-                            <button
-                                onClick={() => handleTabChange("settings")}
-                                className={`p-2.5 rounded-xl transition-all border ${
-                                    activeTab === "settings"
-                                        ? "bg-slate-200 dark:bg-emerald-500/30 text-emerald-600 dark:text-emerald-300 border-slate-300 dark:border-emerald-500/40 shadow-sm"
-                                        : "bg-slate-50 dark:bg-emerald-500/10 text-slate-500 dark:text-emerald-400 border-slate-200/70 dark:border-emerald-500/20 hover:scale-105 active:scale-95"
-                                }`}
-                                aria-label="Settings"
-                            >
-                                <Settings className="w-5 h-5" />
-                            </button>
-                            
                             <button
                                 onClick={toggleDarkMode}
                                 className="p-2.5 rounded-xl bg-slate-50 dark:bg-emerald-500/10 text-slate-500 dark:text-emerald-400 border border-slate-200/70 dark:border-emerald-500/20 hover:scale-105 active:scale-95 transition-all"
@@ -472,11 +445,11 @@ const AzkarApp = () => {
             <div className="hidden md:block container mx-auto px-4 py-6">
                 <div className="max-w-3xl mx-auto">
                     <div className="p-1.5 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50 flex gap-1 overflow-x-auto no-scrollbar scroll-smooth">
-                        {tabs.filter(tab => tab.id !== "settings").map((tab) => (
+                        {tabs.map((tab) => (
                             <button
                                 key={tab.id}
                                 onClick={() => handleTabChange(tab.id)}
-                                className={`flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl transition-all duration-300 whitespace-nowrap whitespace-nowrap font-bold text-sm ${
+                                className={`flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl transition-all duration-300 whitespace-nowrap font-bold text-sm ${
                                     activeTab === tab.id
                                         ? `bg-gradient-to-br ${tab.color} text-white shadow-lg scale-[1.02]`
                                         : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900"
@@ -555,7 +528,7 @@ const AzkarApp = () => {
             </footer>
 
             <nav className="bottom-nav" role="navigation" aria-label={t.navLabel}>
-                {tabs.filter(tab => tab.id !== "settings").map((tab) => (
+                {tabs.map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => handleTabChange(tab.id)}

@@ -1,6 +1,6 @@
 {
-    "name": "أذكاري - الحِصن المنيع للمسلم",
-    "short_name": "أذكاري",
+    "name": "حصنك - الحِصن المنيع للمسلم",
+    "short_name": "حصنك",
     "description": "تطبيق أذكار الصباح والمساء ومواقيت الصلاة مع خاصية العمل بدون إنترنت",
     "start_url": "./index.html",
     "display": "standalone",
@@ -12,7 +12,7 @@
     "categories": ["lifestyle", "education"],
     "icons": [
         {
-            "src": "azkari_logo.png",
+            "src": "hesnok_logo.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"

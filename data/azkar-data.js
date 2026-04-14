@@ -4,13 +4,13 @@ window.AZKAR_DATA = {
         "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار"
     ],
     tabs: [
-        { id: "morning", label: "الصباح", labelEn: "Morning", icon: "Sun", color: "from-amber-400 to-orange-500" },
-        { id: "evening", label: "المساء", labelEn: "Evening", icon: "Moon", color: "from-indigo-500 to-purple-600" },
-        { id: "sleeping", label: "النوم", labelEn: "Sleep", icon: "Moon", color: "from-slate-700 to-slate-900" },
-        { id: "prayer_azkar", label: "بعد الصلاة", labelEn: "After Prayer", icon: "BookOpen", color: "from-emerald-500 to-teal-600" },
-        { id: "prayer", label: "المواقيت", labelEn: "Prayer Times", icon: "Clock", color: "from-blue-500 to-cyan-500" },
-        { id: "custom", label: "أدعيتي", labelEn: "My Duas", icon: "Heart", color: "from-rose-400 to-pink-600" },
-        { id: "settings", label: "الإعدادات", labelEn: "Settings", icon: "Settings", color: "from-slate-500 to-slate-700" }
+        { id: "morning", label: "الصباح", labelEn: "Morning", icon: "Sun", color: "from-[#D4A76A] to-[#B18F67]" },
+        { id: "evening", label: "المساء", labelEn: "Evening", icon: "Moon", color: "from-[#423E87] to-[#2E2A5E]" },
+        { id: "sleeping", label: "النوم", labelEn: "Sleep", icon: "Moon", color: "from-[#1a1a2e] to-[#423E87]" },
+        { id: "prayer_azkar", label: "بعد الصلاة", labelEn: "After Prayer", icon: "BookOpen", color: "from-[#B18F67] to-[#D4A76A]" },
+        { id: "prayer", label: "المواقيت", labelEn: "Prayer Times", icon: "Clock", color: "from-[#423E87] to-[#D4A76A]" },
+        { id: "custom", label: "أدعيتي", labelEn: "My Duas", icon: "Heart", color: "from-[#CC6243] to-[#B18F67]" },
+        { id: "settings", label: "الإعدادات", labelEn: "Settings", icon: "Settings", color: "from-[#B2AE97] to-[#7c7c9f]" }
     ],
     azkar: {
         morning: [
@@ -249,7 +249,7 @@ window.AZKAR_DATA = {
                 gradeEn: "Sahih"
             },
             {
-                id: 19,
+                id: 22,
                 text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا",
                 count: 1,
                 benefit: "دعاء يطلب فيه المسلم من الله العلم النافع، والرزق الطيب الحلال، والعمل الصالح المقبول",

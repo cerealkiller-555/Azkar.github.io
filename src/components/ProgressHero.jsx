@@ -9,12 +9,12 @@ const ProgressHero = ({ activeTab, progressPercentage, completedCount, totalCoun
     }
 
     const themeClass = activeTab === "morning"
-        ? "from-amber-400 to-orange-600"
+        ? "from-[#D4A76A] to-[#B18F67]"
         : activeTab === "evening"
-            ? "from-indigo-600 to-purple-800"
+            ? "from-[#423E87] to-[#2E2A5E]"
             : activeTab === "sleeping"
-                ? "from-slate-800 to-slate-950"
-                : "from-emerald-600 to-teal-800";
+                ? "from-[#1a1a2e] to-[#423E87]"
+                : "from-[#B18F67] to-[#D4A76A]";
 
     const title = activeTab === "morning"
         ? t.progressTitleMorning
