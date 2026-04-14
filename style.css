@@ -2,14 +2,20 @@
 @import "tailwindcss";
 
 :root {
-    --primary: #D4A76A; /* Patina Gold */
-    --primary-dark: #B18F67; /* Natural Wood */
+    --primary: #D4A76A;
+    /* Patina Gold */
+    --primary-dark: #B18F67;
+    /* Natural Wood */
     --primary-glow: rgba(212, 167, 106, 0.25);
-    --secondary: #423E87; /* Islamic Navy */
-    --accent: #FFB800; /* Bright Gold */
-    --bg-light: #EADEC9; /* Light Birch */
+    --secondary: #423E87;
+    /* Islamic Navy */
+    --accent: #FFB800;
+    /* Bright Gold */
+    --bg-light: #EADEC9;
+    /* Light Birch */
     --bg-dark: #1a1a2e;
-    --text-main: #423E87; /* Islamic Navy */
+    --text-main: #423E87;
+    /* Islamic Navy */
     --text-muted: #7c7c9f;
     --card-shadow: 0 4px 32px rgba(66, 62, 135, 0.08), 0 1px 4px rgba(66, 62, 135, 0.04);
     --card-shadow-hover: 0 12px 48px rgba(66, 62, 135, 0.15), 0 2px 8px rgba(66, 62, 135, 0.1);
@@ -22,7 +28,8 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     font-family: 'Cairo', sans-serif;
@@ -56,6 +63,7 @@ html {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -67,6 +75,7 @@ html {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -74,8 +83,13 @@ html {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes scaleIn {
@@ -83,6 +97,7 @@ html {
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -90,35 +105,136 @@ html {
 }
 
 @keyframes pulseGlow {
-    0%, 100% {
+
+    0%,
+    100% {
         box-shadow: 0 0 0 0 var(--primary-glow);
     }
+
     50% {
         box-shadow: 0 0 20px 8px var(--primary-glow);
     }
 }
 
-@keyframes completedPop {
-    0% { transform: scale(1); }
-    30% { transform: scale(1.1); }
-    60% { transform: scale(0.95); }
-    100% { transform: scale(1); }
-}
+@keyframes smoothBounce {
 
-@keyframes countPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes countPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Loading skeleton animation */
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Smooth page transitions */
+.page-transition {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Better hover effects */
+.interactive-element {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interactive-element:hover {
+    transform: translateY(-2px);
+}
+
+@keyframes completedPop {
+    0% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.1);
+    }
+
+    60% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes countPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 @keyframes floatSlow {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 @keyframes toastSlide {
@@ -126,6 +242,7 @@ html {
         opacity: 0;
         transform: translateY(30px) scale(0.9);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -137,6 +254,7 @@ html {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
+
     100% {
         opacity: 0;
         transform: translateY(30px) scale(0.85);
@@ -148,6 +266,7 @@ html {
         transform: scale(0);
         opacity: 0.5;
     }
+
     100% {
         transform: scale(4);
         opacity: 0;
@@ -179,19 +298,49 @@ html {
 }
 
 /* Staggered children animation */
-.stagger-children > * {
+.stagger-children>* {
     animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
-.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
-.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
-.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
-.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
-.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
-.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
-.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
-.stagger-children > *:nth-child(9) { animation-delay: 480ms; }
-.stagger-children > *:nth-child(10) { animation-delay: 540ms; }
+
+.stagger-children>*:nth-child(1) {
+    animation-delay: 0ms;
+}
+
+.stagger-children>*:nth-child(2) {
+    animation-delay: 60ms;
+}
+
+.stagger-children>*:nth-child(3) {
+    animation-delay: 120ms;
+}
+
+.stagger-children>*:nth-child(4) {
+    animation-delay: 180ms;
+}
+
+.stagger-children>*:nth-child(5) {
+    animation-delay: 240ms;
+}
+
+.stagger-children>*:nth-child(6) {
+    animation-delay: 300ms;
+}
+
+.stagger-children>*:nth-child(7) {
+    animation-delay: 360ms;
+}
+
+.stagger-children>*:nth-child(8) {
+    animation-delay: 420ms;
+}
+
+.stagger-children>*:nth-child(9) {
+    animation-delay: 480ms;
+}
+
+.stagger-children>*:nth-child(10) {
+    animation-delay: 540ms;
+}
 
 /* ============================================
    TOAST NOTIFICATIONS
@@ -229,17 +378,22 @@ html {
 }
 
 .toast-success {
-    background: rgba(66, 62, 135, 0.95); /* Islamic Navy */
-    color: #D4A76A; /* Patina Gold text */
+    background: rgba(66, 62, 135, 0.95);
+    /* Islamic Navy */
+    color: #D4A76A;
+    /* Patina Gold text */
 }
 
 .toast-info {
-    background: rgba(212, 167, 106, 0.95); /* Patina Gold */
-    color: #423E87; /* Islamic Navy text */
+    background: rgba(212, 167, 106, 0.95);
+    /* Patina Gold */
+    color: #423E87;
+    /* Islamic Navy text */
 }
 
 .toast-warning {
-    background: rgba(204, 98, 67, 0.95); /* Terracotta */
+    background: rgba(204, 98, 67, 0.95);
+    /* Terracotta */
     color: white;
 }
 
@@ -318,10 +472,12 @@ html {
         padding-left: 12px;
         padding-right: 12px;
         scroll-behavior: smooth;
-        -ms-overflow-style: none; /* IE and Edge */
-        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
     }
-    
+
     .bottom-nav::-webkit-scrollbar {
         display: none;
     }
@@ -450,15 +606,18 @@ html {
     width: 6px;
     height: 6px;
 }
+
 ::-webkit-scrollbar-track {
-    background: transparent; 
+    background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1; 
+    background: #cbd5e1;
     border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-    background: #423E87; 
+    background: #423E87;
 }
 
 /* ============================================
@@ -544,7 +703,7 @@ html {
 }
 
 .shimmer-bg {
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
     background-size: 200% 100%;
     animation: shimmer 2s infinite;
 }
@@ -555,14 +714,18 @@ html {
 }
 
 /* Focus visible styles for accessibility */
-button:focus-visible, input:focus-visible {
+button:focus-visible,
+input:focus-visible {
     outline: 2px solid #D4A76A;
     outline-offset: 2px;
 }
 
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+
+    *,
+    *::before,
+    *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
