@@ -37,6 +37,7 @@ const AzkarApp = () => {
     const [isOffline, setIsOffline] = useState(!navigator.onLine);
     const [deferredPrompt, setDeferredPrompt] = useState(null);
     const mainRef = useRef(null);
+    const toastShownRef = useRef(new Set());
 
     const t = useMemo(() => I18N[language] || I18N.ar, [language]);
 
@@ -257,7 +258,7 @@ const AzkarApp = () => {
         showToast(t.duaDeleted, "info");
     }, [t]);
 
-    const handleZikrProgress = useCallback((id, count) => {
+    const handleZikrProgress = useCallback((id, count, list, type) => {
         if (completedAzkar[id]) {
             return;
         }
@@ -278,9 +279,24 @@ const AzkarApp = () => {
         if (cappedCount >= count) {
             setCompletedAzkar((current) => {
                 if (current[id]) return current;
-                showToast(t.progressCompleted);
-                if (navigator.vibrate) {
-                    navigator.vibrate([100, 50, 100]);
+                if (!toastShownRef.current.has(id)) {
+                    toastShownRef.current.add(id);
+                    showToast(t.progressCompleted);
+                    if (navigator.vibrate) {
+                        navigator.vibrate([100, 50, 100]);
+                    }
+                }
+                // Auto-scroll to next incomplete zikr
+                const currentIndex = list.findIndex(zikr => `${type}_${zikr.id}` === id);
+                const nextIncomplete = list.slice(currentIndex + 1).find(zikr => !completedAzkar[`${type}_${zikr.id}`]);
+                if (nextIncomplete) {
+                    const nextId = `${type}_${nextIncomplete.id}`;
+                    setTimeout(() => {
+                        const nextElement = document.getElementById(`zikr-${nextId}`);
+                        if (nextElement) {
+                            nextElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }, 500); // Delay to allow completion animation
                 }
                 return { ...current, [id]: true };
             });
@@ -325,7 +341,7 @@ const AzkarApp = () => {
     }, [deferredPrompt, t]);
 
     const renderAzkarList = (list, type) => (
-        <div className="space-y-5 stagger-children">
+        <div className="space-y-5">
             {list.map((zikr, index) => {
                 const uniqueId = `${type}_${zikr.id}`;
                 const isCompleted = Boolean(completedAzkar[uniqueId]);
@@ -364,7 +380,7 @@ const AzkarApp = () => {
                                 window.setTimeout(() => ripple.remove(), 600);
                             }
 
-                            handleZikrProgress(uniqueId, zikr.count);
+                            handleZikrProgress(uniqueId, zikr.count, list, type);
                         }}
                     />
                 );
@@ -392,7 +408,7 @@ const AzkarApp = () => {
         <div
             className={`min-h-screen ${isDarkMode ? "dark bg-slate-950" : "bg-slate-50"} transition-colors duration-500`}
             dir={language === "en" ? "ltr" : "rtl"}
-            style={{ fontFamily: language === "en" ? "'Inter', sans-serif" : "'Cairo', sans-serif" }}
+            style={{ fontFamily: language === "en" ? "'Inter', sans-serif" : "'Cairo', sans-serif", backgroundColor: isDarkMode ? '#0f172a' : '#f8fafc', color: isDarkMode ? '#f1f5f9' : '#1e293b' }}
         >
             <OfflineBanner offline={isOffline} t={t} />
             <ToastContainer />
@@ -402,7 +418,9 @@ const AzkarApp = () => {
                 <div className="container mx-auto px-4 py-3 md:py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3 group">
-                            <img src="hesnok_logo.jpg" alt="حصنك" className="w-10 h-10 md:w-12 md:h-12 object-contain transition-transform duration-300 group-hover:scale-110 drop-shadow-md" />
+                            <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-white ring-1 ring-slate-200/70 shadow-md transition-transform duration-300 group-hover:scale-105">
+                                <img src="azkari_logo.png" alt="حصنك" className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-sm" />
+                            </div>
                             <div>
                                 <h1 className="text-lg md:text-2xl font-black text-[#423E87] dark:text-[#D4A76A] tracking-tight leading-tight">{t.appName}</h1>
                                 <p className="text-[10px] md:text-xs text-[#B18F67] dark:text-[#B2AE97] font-bold leading-tight">{t.appTagline}</p>
@@ -423,6 +441,19 @@ const AzkarApp = () => {
                                 {isOffline ? <WifiOff className="w-3.5 h-3.5" /> : <Wifi className="w-3.5 h-3.5" />}
                                 <span>{isOffline ? t.offline : t.online}</span>
                             </div>
+
+                            <button
+                                onClick={() => handleTabChange("settings")}
+                                className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition-all ${
+                                    activeTab === "settings"
+                                        ? "bg-[#423E87] text-white border-[#423E87]"
+                                        : "bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200/70 dark:border-slate-700/50 hover:border-[#D4A76A]"
+                                }`}
+                                aria-label={t.openSettings}
+                            >
+                                <Settings className="w-4 h-4" />
+                                <span className="hidden sm:inline">{t.openSettings}</span>
+                            </button>
 
                             <button
                                 onClick={toggleDarkMode}

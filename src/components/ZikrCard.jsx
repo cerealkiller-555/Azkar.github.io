@@ -26,6 +26,7 @@ const ZikrCard = ({
 
     return (
         <div
+            id={`zikr-${uniqueId}`}
             className={`zikr-card relative overflow-hidden rounded-3xl transition-all duration-500 ${
                 isCompleted
                     ? "bg-[#D4A76A]/10 dark:bg-[#D4A76A]/20 border-[#D4A76A]/50 dark:border-[#D4A76A]/30"

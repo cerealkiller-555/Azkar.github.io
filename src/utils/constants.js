@@ -2,6 +2,14 @@ import { Clock, Moon, Sun, BookOpen, Heart, Settings } from 'lucide-react';
 
 export const ICONS = { Clock, Moon, Sun, BookOpen, Heart, Settings };
 // window.AZKAR_DATA is assumed to be loaded globally or imported. For now we use the global from azkar-data.js
+if (!window.AZKAR_DATA) {
+    console.error("AZKAR_DATA not loaded. Please check if azkar-data.js is included.");
+    window.AZKAR_DATA = {
+        azkar: { morning: [], evening: [], sleeping: [], prayerAzkar: [] },
+        defaultCustomDuas: [],
+        tabs: []
+    };
+}
 export const { azkar, defaultCustomDuas, tabs: tabConfig } = window.AZKAR_DATA;
 export const DAILY_TAB_IDS = ["morning", "evening", "sleeping", "prayer_azkar"];
 export const OFFLINE_PRAYER_TIMES = {
@@ -21,9 +29,16 @@ export const I18N = {
         appTagline: "الحِصن المنيع للمسلم",
         loginTitle: "تسجيل الدخول",
         loginSubtitle: "احفظ بياناتك وتقدمك على هذا الجهاز",
+        createAccountTitle: "إنشاء حساب جديد",
+        createAccountSubtitle: "أنشئ ملفك المحلي وابدأ بحفظ تقدمك على هذا الجهاز",
         nameLabel: "الاسم الكامل",
         emailLabel: "البريد الإلكتروني",
         loginButton: "دخول",
+        createAccountButton: "إنشاء حساب",
+        createAccountLink: "إنشاء حساب جديد",
+        signInInstead: "لديك حساب بالفعل",
+        settingsHint: "ستجد الإعدادات من زر الترس أعلى الشاشة بعد الدخول.",
+        openSettings: "الإعدادات",
         logoutButton: "تسجيل الخروج",
         settingsTitle: "الإعدادات",
         languageTitle: "اللغة",
@@ -97,9 +112,16 @@ export const I18N = {
         appTagline: "Your daily spiritual companion",
         loginTitle: "Sign In",
         loginSubtitle: "Save your info and progress on this device",
+        createAccountTitle: "Create Account",
+        createAccountSubtitle: "Create a local profile and keep your progress on this device",
         nameLabel: "Full name",
         emailLabel: "Email",
         loginButton: "Continue",
+        createAccountButton: "Create account",
+        createAccountLink: "Create a new account",
+        signInInstead: "I already have an account",
+        settingsHint: "You can find Settings from the gear button at the top after signing in.",
+        openSettings: "Settings",
         logoutButton: "Sign out",
         settingsTitle: "Settings",
         languageTitle: "Language",
