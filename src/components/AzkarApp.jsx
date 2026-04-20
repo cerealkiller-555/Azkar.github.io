@@ -251,34 +251,38 @@ const AzkarApp = () => {
     }, []);
 
     const handleLogin = useCallback((profile, mode) => {
-        const cleaned = { name: profile.name.trim(), email: profile.email.trim().toLowerCase() };
+        const cleaned = { 
+            name: profile.name.trim(), 
+            email: profile.email.trim().toLowerCase() 
+        };
         
-        // Local user registry to "simulate" accounts
         const registry = readJson("azkar_users_registry", {});
-        const userExists = registry[cleaned.email];
+        const registeredName = registry[cleaned.email];
 
         if (mode === "signin") {
-            if (!userExists) {
-                showToast(language === "en" ? "Account not found. Please create one." : "الحساب غير موجود، يرجى إنشاء حساب جديد.", "error");
+            if (!registeredName) {
+                showToast(language === "en" ? "Account not found. Please create one first." : "الحساب غير موجود. يرجى إنشاء حساب أولاً.", "error");
                 return;
             }
-            // If user exists, we log them in and update their name just in case
+            
+            // Success: Load the name that was actually registered
+            const user = { name: registeredName, email: cleaned.email };
+            setUserProfile(user);
+            setIsLoggedIn(true);
+            showToast(language === "en" ? `Welcome back, ${registeredName}!` : `أهلاً بعودتك يا ${registeredName}!`, "success");
+        } else {
+            // Create account mode
+            if (registeredName) {
+                showToast(language === "en" ? "This email is already registered. Please sign in." : "هذا البريد مسجل بالفعل. يرجى تسجيل الدخول.", "warning");
+                return;
+            }
+            
+            // Success: Register new user
             registry[cleaned.email] = cleaned.name;
             localStorage.setItem("azkar_users_registry", JSON.stringify(registry));
             setUserProfile(cleaned);
             setIsLoggedIn(true);
-            showToast(language === "en" ? `Welcome back, ${cleaned.name}!` : `أهلاً بعودتك يا ${cleaned.name}!`, "success");
-        } else {
-            // Create account mode
-            if (userExists) {
-                showToast(language === "en" ? "Account already exists. Signing you in..." : "الحساب موجود بالفعل، جاري تسجيل دخولك...", "info");
-            } else {
-                registry[cleaned.email] = cleaned.name;
-                localStorage.setItem("azkar_users_registry", JSON.stringify(registry));
-                showToast(language === "en" ? "Account created successfully!" : "تم إنشاء الحساب بنجاح!", "success");
-            }
-            setUserProfile(cleaned);
-            setIsLoggedIn(true);
+            showToast(language === "en" ? "Account created successfully!" : "تم إنشاء الحساب بنجاح!", "success");
         }
     }, [language]);
 
@@ -291,10 +295,16 @@ const AzkarApp = () => {
     }, []);
 
     const logout = useCallback(() => {
+        // Clear all session states to prevent data leak
+        setCompletedAzkar({});
+        setAzkarProgress({});
+        setPrayerChecklist({});
+        setStreak({ count: 0, lastDate: null });
+        
         setIsLoggedIn(false);
         setUserProfile({ name: "", email: "" });
         localStorage.removeItem("azkar_user");
-        showToast(language === "en" ? "Logged out" : "تم تسجيل الخروج", "info");
+        showToast(language === "en" ? "Logged out safely" : "تم تسجيل الخروج بأمان", "info");
     }, [language]);
 
     const addCustomDua = useCallback(() => {
