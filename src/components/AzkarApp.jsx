@@ -486,9 +486,9 @@ const AzkarApp = () => {
 
     return (
         <div
-            className={`min-h-screen ${isDarkMode ? "dark bg-slate-950" : "bg-slate-50"} transition-colors duration-500`}
+            className={`min-h-screen transition-colors duration-500 pattern-bg ${isDarkMode ? "dark bg-[#0f172a]" : "bg-[#fdfbf7]"}`}
             dir={language === "en" ? "ltr" : "rtl"}
-            style={{ fontFamily: language === "en" ? "'Inter', sans-serif" : "'Cairo', sans-serif", backgroundColor: isDarkMode ? '#0f172a' : '#f8fafc', color: isDarkMode ? '#f1f5f9' : '#1e293b' }}
+            style={{ fontFamily: language === "en" ? "'Inter', sans-serif" : "'Cairo', sans-serif", color: isDarkMode ? '#f8fafc' : '#1e293b' }}
         >
             <OfflineBanner offline={isOffline} t={t} />
             <ToastContainer />

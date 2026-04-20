@@ -2,25 +2,35 @@
 @import "tailwindcss";
 
 :root {
-    --primary: #D4A76A;
-    /* Patina Gold */
-    --primary-dark: #B18F67;
-    /* Natural Wood */
+    --primary: #D4A76A; /* Patina Gold */
+    --primary-dark: #B18F67; /* Natural Wood */
     --primary-glow: rgba(212, 167, 106, 0.25);
-    --secondary: #423E87;
-    /* Islamic Navy */
-    --accent: #FFB800;
-    /* Bright Gold */
-    --bg-light: #EADEC9;
-    /* Light Birch */
-    --bg-dark: #1a1a2e;
-    --text-main: #423E87;
-    /* Islamic Navy */
-    --text-muted: #7c7c9f;
-    --card-shadow: 0 4px 32px rgba(66, 62, 135, 0.08), 0 1px 4px rgba(66, 62, 135, 0.04);
-    --card-shadow-hover: 0 12px 48px rgba(66, 62, 135, 0.15), 0 2px 8px rgba(66, 62, 135, 0.1);
-    --sandstone: #B2AE97;
-    --terracotta: #CC6243;
+    --secondary: #423E87; /* Islamic Navy */
+    --accent: #FFB800; /* Bright Gold */
+    --bg-light: #fdfbf7;
+    --bg-birch: #EADEC9;
+    --bg-dark: #0f172a;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --glass: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    
+    /* Premium Shadows */
+    --shadow-sm: 0 2px 4px rgba(66, 62, 135, 0.05);
+    --shadow-md: 0 12px 24px -12px rgba(66, 62, 135, 0.15);
+    --shadow-lg: 0 25px 50px -12px rgba(66, 62, 135, 0.25);
+    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.pattern-bg {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23d4a76a' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+.glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
 }
 
 * {

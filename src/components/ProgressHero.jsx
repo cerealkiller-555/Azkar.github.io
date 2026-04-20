@@ -8,67 +8,98 @@ const ProgressHero = ({ activeTab, progressPercentage, completedCount, totalCoun
         return null;
     }
 
-    const themeClass = activeTab === "morning"
-        ? "from-[#D4A76A] to-[#B18F67]"
-        : activeTab === "evening"
-            ? "from-[#423E87] to-[#2E2A5E]"
-            : activeTab === "sleeping"
-                ? "from-[#1a1a2e] to-[#423E87]"
-                : "from-[#B18F67] to-[#D4A76A]";
+    const themeConfig = {
+        morning: {
+            gradient: "from-[#FAD961] via-[#D4A76A] to-[#B18F67]",
+            icon: Sun,
+            label: t.progressTitleMorning,
+            accent: "bg-white/30"
+        },
+        evening: {
+            gradient: "from-[#423E87] via-[#332F6A] to-[#2E2A5E]",
+            icon: Moon,
+            label: t.progressTitleEvening,
+            accent: "bg-[#D4A76A]/20"
+        },
+        sleeping: {
+            gradient: "from-[#0f172a] via-[#1e293b] to-[#423E87]",
+            icon: Moon,
+            label: t.progressTitleSleeping,
+            accent: "bg-white/10"
+        },
+        prayer_azkar: {
+            gradient: "from-[#B18F67] via-[#D4A76A] to-[#EADEC9]",
+            icon: BookOpen,
+            label: t.progressTitlePrayer,
+            accent: "bg-black/5"
+        }
+    }[activeTab] || {
+        gradient: "from-[#D4A76A] to-[#B18F67]",
+        icon: Sun,
+        label: t.progressTitleMorning,
+        accent: "bg-white/20"
+    };
 
-    const title = activeTab === "morning"
-        ? t.progressTitleMorning
-        : activeTab === "evening"
-            ? t.progressTitleEvening
-            : activeTab === "sleeping"
-                ? t.progressTitleSleeping
-                : t.progressTitlePrayer;
-
-    const Icon = activeTab === "morning"
-        ? Sun
-        : activeTab === "evening" || activeTab === "sleeping"
-            ? Moon
-            : BookOpen;
+    const Icon = themeConfig.icon;
 
     const greeting = userProfile?.name
         ? (language === "en" ? `Welcome, ${userProfile.name}` : `أهلاً بك، ${userProfile.name}`)
         : null;
 
     return (
-        <div className={`mb-8 p-6 md:p-8 rounded-3xl bg-gradient-to-br transition-all duration-500 shadow-2xl relative overflow-hidden ${themeClass} text-white`}>
-            <div className="absolute top-0 right-0 p-6 opacity-[0.08] float-slow">
-                <Icon className="w-40 h-40" />
+        <div className={`mb-10 p-8 md:p-12 rounded-[2.5rem] bg-gradient-to-br ${themeConfig.gradient} transition-all duration-700 shadow-2xl relative overflow-hidden text-white`}>
+            {/* Animated Decorative Shapes */}
+            <div className="absolute top-[-10%] right-[-5%] w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-[-10%] left-[-5%] w-48 h-48 bg-black/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+            
+            <div className="absolute top-0 right-0 p-8 opacity-[0.12] float-slow">
+                <Icon className="w-48 h-48" />
             </div>
 
-            <div className="relative z-10">
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                    <div>
-                        {greeting && <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">{greeting}</p>}
-                        <h2 className="text-2xl md:text-4xl font-black mb-2">{title}</h2>
-                        <p className="text-white/70 text-sm md:text-base font-medium">
-                            {t.progressText} {completedCount} {t.progressOf} {totalCount} {t.progressAzkar} • {progressPercentage}%
+            <div className="relative z-10 flex flex-col gap-8">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="space-y-1">
+                        {greeting && (
+                            <span className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-black uppercase tracking-[0.2em] mb-3 border border-white/10">
+                                {greeting}
+                            </span>
+                        )}
+                        <h2 className="text-3xl md:text-5xl font-black tracking-tight leading-tight">{themeConfig.label}</h2>
+                        <p className="text-white/80 text-sm md:text-lg font-medium max-w-md">
+                            {t.progressText} <span className="text-white font-black">{completedCount}</span> {t.progressOf} <span className="text-white font-black">{totalCount}</span> {t.progressAzkar}
                         </p>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="bg-white/20 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-white/20 text-center">
-                            <span className="text-2xl md:text-3xl font-black block leading-none mb-0.5">{progressPercentage}%</span>
-                            <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">{t.progressLabel}</span>
+
+                    <div className="flex items-center gap-4">
+                        <div className="flex flex-col items-center justify-center bg-white/15 backdrop-blur-xl px-8 py-5 rounded-3xl border border-white/20 shadow-xl min-w-[120px]">
+                            <span className="text-4xl md:text-5xl font-black block leading-none mb-1 tracking-tighter">{progressPercentage}%</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.15em] opacity-80">{t.progressLabel}</span>
                         </div>
+                        
                         {progressPercentage > 0 && (
                             <button
                                 onClick={resetAllProgress}
-                                className="p-2.5 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 text-white/80 hover:text-white hover:bg-white/25 transition-all active:scale-95"
+                                className="group p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white/80 hover:text-white hover:bg-white/20 transition-all active:scale-90"
                                 title={t.resetProgress}
-                                aria-label={t.resetProgress}
                             >
-                                <RotateCcw className="w-5 h-5" />
+                                <RotateCcw className="w-6 h-6 group-hover:rotate-[-45deg] transition-transform duration-300" />
                             </button>
                         )}
                     </div>
                 </div>
 
-                <div className="mt-4 h-2 rounded-full bg-white/20 overflow-hidden">
-                    <div className="h-full rounded-full bg-white/80 transition-all duration-1000 ease-out" style={{ width: `${progressPercentage}%` }} />
+                {/* Enhanced Progress Bar */}
+                <div className="space-y-3">
+                    <div className="h-4 rounded-full bg-black/10 backdrop-blur-sm p-1 border border-white/5">
+                        <div 
+                            className="h-full rounded-full bg-gradient-to-r from-white/60 to-white shadow-[0_0_15px_rgba(255,255,255,0.5)] transition-all duration-1000 ease-out" 
+                            style={{ width: `${progressPercentage}%` }} 
+                        />
+                    </div>
+                    <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-widest text-white/50 px-2">
+                        <span>{t.beginning || "Start"}</span>
+                        <span>{t.completed || "Done"}</span>
+                    </div>
                 </div>
             </div>
         </div>
