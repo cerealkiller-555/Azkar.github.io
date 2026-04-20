@@ -47,7 +47,7 @@ const ZikrCard = ({
                     : ""
             } ${
                 isCompleted
-                    ? "bg-gradient-to-br from-[#D4A76A]/5 to-[#D4A76A]/20 border-[#D4A76A]/40 shadow-inner"
+                    ? "bg-gradient-to-br from-[#D4A76A]/10 to-[#10b981]/5 border-[#10b981]/40 shadow-inner"
                     : "bg-white dark:bg-slate-800/80 border-slate-100/50 dark:border-slate-700/50 glass-card shadow-sm hover:shadow-xl hover:translate-y-[-4px]"
             } mb-6`}
             style={{ animationDelay: `${index * 80}ms` }}
@@ -107,7 +107,7 @@ const ZikrCard = ({
                 <div className="relative mb-8">
                     <p className={`font-amiri text-2xl md:text-4xl leading-[1.8] text-center transition-all duration-700 ${
                         isCompleted 
-                            ? "text-slate-400 dark:text-slate-500 scale-95" 
+                            ? "text-[#10b981] dark:text-[#34d399] opacity-90 scale-95" 
                             : "text-black dark:text-white"
                     }`}>
                         {zikr.text}
