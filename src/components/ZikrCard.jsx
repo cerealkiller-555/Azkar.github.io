@@ -1,22 +1,26 @@
-import React, { useRef } from 'react';
-import { Share2, CheckCircle, Info, ChevronDown, BookOpen } from 'lucide-react';
+import React, { useRef, useEffect, useState } from 'react';
+import { Share2, CheckCircle, Info, ChevronDown, BookOpen, ChevronRight } from 'lucide-react';
 import { showToast } from '../utils/helpers';
 
 const ZikrCard = ({
     zikr,
     index,
+    uniqueId,
     t,
     isCompleted,
     progress,
     isExpanded,
     progressPct,
     isAnimating,
+    isHighlighted,
     language,
     onToggleBenefit,
     onToggleComplete,
     onProgress
 }) => {
     const buttonRef = useRef(null);
+    const cardRef = useRef(null);
+    const [showCelebration, setShowCelebration] = useState(false);
 
     const isEn = language === "en";
     const title = isEn && zikr.titleEn ? zikr.titleEn : zikr.title;
@@ -24,29 +28,56 @@ const ZikrCard = ({
     const meaning = isEn && zikr.meaningEn ? zikr.meaningEn : zikr.meaning;
     const source = isEn && zikr.sourceEn ? zikr.sourceEn : zikr.source;
 
+    // Celebration animation when completed
+    useEffect(() => {
+        if (isCompleted && progress >= zikr.count) {
+            setShowCelebration(true);
+            const timer = setTimeout(() => setShowCelebration(false), 1500);
+            return () => clearTimeout(timer);
+        }
+    }, [isCompleted, progress, zikr.count]);
+
     return (
         <div
             id={`zikr-${uniqueId}`}
+            ref={cardRef}
             className={`zikr-card relative overflow-hidden rounded-3xl transition-all duration-500 ${
+                isHighlighted
+                    ? "ring-2 ring-[#D4A76A] ring-offset-2 dark:ring-offset-slate-950 shadow-2xl shadow-[#D4A76A]/20"
+                    : ""
+            } ${
                 isCompleted
                     ? "bg-[#D4A76A]/10 dark:bg-[#D4A76A]/20 border-[#D4A76A]/50 dark:border-[#D4A76A]/30"
                     : "bg-white dark:bg-slate-800/90 border-slate-100 dark:border-slate-700/50"
             } border shadow-lg hover:shadow-xl`}
             style={{ animationDelay: `${index * 60}ms` }}
         >
-            <div className="h-1 w-full bg-slate-100 dark:bg-slate-700/50">
+            {/* Celebration overlay */}
+            {showCelebration && (
+                <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+                    <div className="celebration-burst" />
+                </div>
+            )}
+
+            {/* Progress bar */}
+            <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-700/50 overflow-hidden">
                 <div
-                    className={`h-full transition-all duration-500 ease-out ${isCompleted ? "bg-[#D4A76A]" : "bg-[#B18F67]"}`}
+                    className={`h-full transition-all duration-500 ease-out ${
+                        isCompleted
+                            ? "bg-gradient-to-r from-[#D4A76A] to-[#B18F67]"
+                            : "bg-gradient-to-r from-[#423E87] to-[#B18F67]"
+                    }`}
                     style={{ width: `${progressPct}%` }}
                 />
             </div>
 
             <div className="p-5 md:p-7">
+                {/* Header row */}
                 <div className="flex items-start justify-between gap-3 mb-4">
                     <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className={`flex-shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-black ${
+                        <div className={`flex-shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-black transition-all duration-300 ${
                             isCompleted
-                                ? "bg-[#D4A76A] text-white"
+                                ? "bg-gradient-to-br from-[#D4A76A] to-[#B18F67] text-white shadow-md shadow-[#D4A76A]/30"
                                 : "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400"
                         }`}>
                             {isCompleted ? <CheckCircle className="w-5 h-5" /> : index + 1}
@@ -87,12 +118,14 @@ const ZikrCard = ({
                     </div>
                 </div>
 
+                {/* Arabic text */}
                 <p className={`font-amiri text-xl md:text-2xl leading-[2] text-center mb-6 px-1 transition-opacity ${
-                    isCompleted ? "text-slate-500 dark:text-slate-400" : "text-slate-800 dark:text-slate-100"
+                    isCompleted ? "text-slate-500 dark:text-slate-400 line-through decoration-[#D4A76A]/30" : "text-slate-800 dark:text-slate-100"
                 }`}>
                     {zikr.text}
                 </p>
 
+                {/* Counter section */}
                 <div className="flex items-center gap-4 mb-4">
                     <button
                         ref={buttonRef}
@@ -100,8 +133,8 @@ const ZikrCard = ({
                         disabled={isCompleted}
                         className={`counter-btn relative flex-1 overflow-hidden px-6 py-4 rounded-2xl font-black text-lg transition-all active:scale-[0.97] ${
                             isCompleted
-                                ? "bg-[#D4A76A]/20 dark:bg-[#D4A76A]/30 text-[#D4A76A] dark:text-[#D4A76A] cursor-default"
-                                : "bg-[#423E87] hover:bg-[#2E2A5E] text-white shadow-lg shadow-[#423E87]/20 dark:shadow-none cursor-pointer"
+                                ? "bg-gradient-to-r from-[#D4A76A]/20 to-[#B18F67]/20 dark:from-[#D4A76A]/30 dark:to-[#B18F67]/30 text-[#D4A76A] dark:text-[#D4A76A] cursor-default"
+                                : "bg-gradient-to-r from-[#423E87] to-[#2E2A5E] hover:from-[#2E2A5E] hover:to-[#423E87] text-white shadow-lg shadow-[#423E87]/20 dark:shadow-none cursor-pointer"
                         }`}
                     >
                         <div className="relative z-10 flex items-center justify-center gap-2">
@@ -130,6 +163,7 @@ const ZikrCard = ({
                     </div>
                 </div>
 
+                {/* Benefits / Source / Meaning */}
                 {(benefit || source || meaning) && (
                     <div>
                         <button

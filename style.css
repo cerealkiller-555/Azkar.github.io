@@ -586,6 +586,55 @@ html {
 }
 
 /* ============================================
+   CELEBRATION BURST (on zikr completion)
+   ============================================ */
+
+@keyframes celebrationBurst {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    30% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(2.5);
+    }
+}
+
+.celebration-burst {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 167, 106, 0.6), rgba(66, 62, 135, 0.3), transparent 70%);
+    animation: celebrationBurst 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    pointer-events: none;
+}
+
+/* ============================================
+   AUTO-ADVANCE HIGHLIGHT GLOW
+   ============================================ */
+
+@keyframes highlightGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(212, 167, 106, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 24px 6px rgba(212, 167, 106, 0.25);
+    }
+}
+
+.zikr-card[class*="ring-"] {
+    animation: highlightGlow 1.2s ease-in-out 2;
+}
+
+/* ============================================
    HIDE SCROLLBAR FOR TAB NAV
    ============================================ */
 

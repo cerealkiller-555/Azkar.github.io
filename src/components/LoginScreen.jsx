@@ -11,84 +11,235 @@ const LoginScreen = ({ onLogin, t, language }) => {
 
     return (
         <div
-            className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(212,167,106,0.25),_transparent_38%),linear-gradient(180deg,_#f8fafc_0%,_#eef4f1_100%)] flex items-center justify-center px-4 py-12"
+            className="min-h-screen flex items-center justify-center px-4 py-12"
             dir={language === "en" ? "ltr" : "rtl"}
-            style={{ fontFamily: language === "en" ? "'Inter', sans-serif" : "'Cairo', sans-serif", background: 'linear-gradient(180deg, #f8fafc 0%, #eef4f1 100%)', color: '#1e293b' }}
+            style={{
+                fontFamily: language === "en" ? "'Inter', sans-serif" : "'Cairo', sans-serif",
+                background: 'linear-gradient(160deg, #f8fafc 0%, #EADEC9 50%, #f8fafc 100%)',
+                color: '#1e293b'
+            }}
         >
-            <div className="max-w-lg w-full bg-white/95 rounded-[2rem] shadow-2xl border border-slate-200/70 p-6 md:p-8 backdrop-blur">
-                <div className="mb-6 text-center">
-                    <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-[1.75rem] bg-white shadow-lg ring-1 ring-slate-200/60">
-                        <img
-                            src="azkari_logo.png"
-                            alt={t.appName}
-                            className="h-20 w-20 object-contain"
-                        />
-                    </div>
-                    <h1 className="text-2xl md:text-3xl font-black text-slate-800 mb-2">{title}</h1>
-                    <p className="text-sm text-slate-500 font-medium">{subtitle}</p>
-                </div>
+            {/* Decorative background elements */}
+            <div style={{
+                position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                background: 'radial-gradient(circle at 20% 20%, rgba(66,62,135,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(212,167,106,0.1) 0%, transparent 50%)',
+                pointerEvents: 'none'
+            }} />
 
-                <div className="mb-5 grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1.5">
-                    <button
-                        type="button"
-                        onClick={() => setMode("signin")}
-                        className={`rounded-xl px-4 py-2.5 text-sm font-black transition-all ${!isCreateMode ? "bg-white text-slate-800 shadow-sm" : "text-slate-500"}`}
-                    >
-                        {t.loginButton}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setMode("create")}
-                        className={`rounded-xl px-4 py-2.5 text-sm font-black transition-all ${isCreateMode ? "bg-white text-slate-800 shadow-sm" : "text-slate-500"}`}
-                    >
-                        {t.createAccountButton}
-                    </button>
-                </div>
-
-                <div className="space-y-4">
-                    <div>
-                        <label className="text-xs font-black text-slate-400" htmlFor="login-name">{t.nameLabel}</label>
-                        <input
-                            id="login-name"
-                            type="text"
-                            value={form.name}
-                            onChange={(event) => setForm({ ...form, name: event.target.value })}
-                            className="w-full mt-2 px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:border-emerald-500 outline-none text-slate-800 font-bold"
-                            placeholder={language === "en" ? "Your name" : "اكتب اسمك"}
-                        />
-                    </div>
-                    <div>
-                        <label className="text-xs font-black text-slate-400" htmlFor="login-email">{t.emailLabel}</label>
-                        <input
-                            id="login-email"
-                            type="email"
-                            value={form.email}
-                            onChange={(event) => setForm({ ...form, email: event.target.value })}
-                            className="w-full mt-2 px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:border-emerald-500 outline-none text-slate-800 font-bold"
-                            placeholder={language === "en" ? "name@example.com" : "name@example.com"}
-                        />
-                    </div>
-                    <button
-                        type="button"
-                        onClick={() => onLogin(form)}
-                        className="w-full py-3 rounded-2xl bg-emerald-600 text-white font-black hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-200/70"
-                    >
-                        {actionLabel}
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => setMode(isCreateMode ? "signin" : "create")}
-                        className="w-full text-sm font-bold text-[#423E87] hover:text-[#2E2A5E] transition-colors"
-                    >
-                        {isCreateMode ? t.signInInstead : t.createAccountLink}
-                    </button>
-
-                    <div className="rounded-2xl border border-[#D4A76A]/25 bg-[#D4A76A]/10 px-4 py-3 text-sm text-slate-600 font-medium">
-                        {t.settingsHint}
+            <div className="max-w-lg w-full relative" style={{ zIndex: 1 }}>
+                {/* Card */}
+                <div style={{
+                    background: 'rgba(255,255,255,0.95)',
+                    borderRadius: '2rem',
+                    boxShadow: '0 25px 60px rgba(66,62,135,0.12), 0 4px 16px rgba(0,0,0,0.06)',
+                    border: '1px solid rgba(212,167,106,0.2)',
+                    padding: '2rem',
+                    backdropFilter: 'blur(20px)'
+                }}>
+                    {/* Logo and Title */}
+                    <div className="mb-6 text-center">
+                        <div style={{
+                            margin: '0 auto 1rem',
+                            display: 'flex',
+                            height: '6rem',
+                            width: '6rem',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: '1.75rem',
+                            background: 'linear-gradient(145deg, #fff, #f8f6f2)',
+                            boxShadow: '0 8px 32px rgba(66,62,135,0.1), 0 1px 4px rgba(0,0,0,0.05)',
+                            border: '1px solid rgba(212,167,106,0.2)'
+                        }}>
+                            <img
+                                src="hesnok_logo.png"
+                                alt={t.appName}
+                                style={{ height: '5rem', width: '5rem', objectFit: 'contain', borderRadius: '1rem' }}
+                            />
+                        </div>
+                        <h1 style={{
+                            fontSize: '1.75rem',
+                            fontWeight: 900,
+                            color: '#423E87',
+                            marginBottom: '0.5rem',
+                            letterSpacing: '-0.02em'
+                        }}>{title}</h1>
+                        <p style={{
+                            fontSize: '0.875rem',
+                            color: '#94a3b8',
+                            fontWeight: 500
+                        }}>{subtitle}</p>
                     </div>
 
-                    <p className="text-xs text-slate-400 font-medium text-center">{t.loginRequired}</p>
+                    {/* Mode toggle */}
+                    <div style={{
+                        marginBottom: '1.5rem',
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '0.5rem',
+                        borderRadius: '1rem',
+                        background: '#f1f5f9',
+                        padding: '0.375rem'
+                    }}>
+                        <button
+                            type="button"
+                            onClick={() => setMode("signin")}
+                            style={{
+                                borderRadius: '0.75rem',
+                                padding: '0.625rem 1rem',
+                                fontSize: '0.875rem',
+                                fontWeight: 800,
+                                border: 'none',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s',
+                                ...(mode === "signin"
+                                    ? { background: '#fff', color: '#423E87', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }
+                                    : { background: 'transparent', color: '#94a3b8' }
+                                ),
+                                fontFamily: 'inherit'
+                            }}
+                        >
+                            {t.loginButton}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setMode("create")}
+                            style={{
+                                borderRadius: '0.75rem',
+                                padding: '0.625rem 1rem',
+                                fontSize: '0.875rem',
+                                fontWeight: 800,
+                                border: 'none',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s',
+                                ...(mode === "create"
+                                    ? { background: '#fff', color: '#423E87', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }
+                                    : { background: 'transparent', color: '#94a3b8' }
+                                ),
+                                fontFamily: 'inherit'
+                            }}
+                        >
+                            {t.createAccountButton}
+                        </button>
+                    </div>
+
+                    {/* Form fields */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div>
+                            <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', display: 'block', marginBottom: '0.5rem' }} htmlFor="login-name">{t.nameLabel}</label>
+                            <input
+                                id="login-name"
+                                type="text"
+                                value={form.name}
+                                onChange={(event) => setForm({ ...form, name: event.target.value })}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.875rem 1rem',
+                                    borderRadius: '1rem',
+                                    background: '#f8fafc',
+                                    border: '1.5px solid #e2e8f0',
+                                    outline: 'none',
+                                    color: '#1e293b',
+                                    fontWeight: 700,
+                                    fontSize: '0.9375rem',
+                                    fontFamily: 'inherit',
+                                    transition: 'border-color 0.3s'
+                                }}
+                                onFocus={(e) => e.target.style.borderColor = '#D4A76A'}
+                                onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                                placeholder={language === "en" ? "Your name" : "اكتب اسمك"}
+                            />
+                        </div>
+                        <div>
+                            <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', display: 'block', marginBottom: '0.5rem' }} htmlFor="login-email">{t.emailLabel}</label>
+                            <input
+                                id="login-email"
+                                type="email"
+                                value={form.email}
+                                onChange={(event) => setForm({ ...form, email: event.target.value })}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.875rem 1rem',
+                                    borderRadius: '1rem',
+                                    background: '#f8fafc',
+                                    border: '1.5px solid #e2e8f0',
+                                    outline: 'none',
+                                    color: '#1e293b',
+                                    fontWeight: 700,
+                                    fontSize: '0.9375rem',
+                                    fontFamily: 'inherit',
+                                    transition: 'border-color 0.3s'
+                                }}
+                                onFocus={(e) => e.target.style.borderColor = '#D4A76A'}
+                                onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                                placeholder={language === "en" ? "name@example.com" : "name@example.com"}
+                            />
+                        </div>
+
+                        {/* Submit button - branded */}
+                        <button
+                            type="button"
+                            onClick={() => onLogin(form)}
+                            style={{
+                                width: '100%',
+                                padding: '0.875rem',
+                                borderRadius: '1rem',
+                                background: 'linear-gradient(135deg, #423E87, #2E2A5E)',
+                                color: '#D4A76A',
+                                fontWeight: 900,
+                                fontSize: '1rem',
+                                border: 'none',
+                                cursor: 'pointer',
+                                boxShadow: '0 8px 24px rgba(66,62,135,0.25)',
+                                transition: 'all 0.3s',
+                                fontFamily: 'inherit'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.transform = 'translateY(-1px)';
+                                e.target.style.boxShadow = '0 12px 32px rgba(66,62,135,0.35)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.transform = 'translateY(0)';
+                                e.target.style.boxShadow = '0 8px 24px rgba(66,62,135,0.25)';
+                            }}
+                        >
+                            {actionLabel}
+                        </button>
+
+                        {/* Toggle mode link */}
+                        <button
+                            type="button"
+                            onClick={() => setMode(isCreateMode ? "signin" : "create")}
+                            style={{
+                                width: '100%',
+                                fontSize: '0.875rem',
+                                fontWeight: 700,
+                                color: '#423E87',
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                padding: '0.5rem',
+                                fontFamily: 'inherit',
+                                transition: 'color 0.3s'
+                            }}
+                        >
+                            {isCreateMode ? t.signInInstead : t.createAccountLink}
+                        </button>
+
+                        {/* Hint */}
+                        <div style={{
+                            borderRadius: '1rem',
+                            border: '1px solid rgba(212,167,106,0.25)',
+                            background: 'rgba(212,167,106,0.08)',
+                            padding: '0.875rem 1rem',
+                            fontSize: '0.8125rem',
+                            color: '#64748b',
+                            fontWeight: 500
+                        }}>
+                            {t.settingsHint}
+                        </div>
+
+                        <p style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 500, textAlign: 'center' }}>{t.loginRequired}</p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -15,6 +15,8 @@ import LoginScreen from './LoginScreen';
 import ZikrCard from './ZikrCard';
 
 const AzkarApp = () => {
+    console.log('AzkarApp component initializing...');
+
     const [activeTab, setActiveTab] = useState(() => localStorage.getItem("azkar_activeTab") || "morning");
     const [prayerTimes, setPrayerTimes] = useState(null);
     const [location, setLocation] = useState(() => readJson("azkar_location", { city: "Cairo", country: "EG" }));
@@ -36,8 +38,14 @@ const AzkarApp = () => {
     const [countAnimation, setCountAnimation] = useState(null);
     const [isOffline, setIsOffline] = useState(!navigator.onLine);
     const [deferredPrompt, setDeferredPrompt] = useState(null);
+    const [highlightedZikr, setHighlightedZikr] = useState(null);
     const mainRef = useRef(null);
     const toastShownRef = useRef(new Set());
+    // Use a ref to always have the latest completedAzkar for auto-advance logic
+    const completedAzkarRef = useRef(completedAzkar);
+    useEffect(() => {
+        completedAzkarRef.current = completedAzkar;
+    }, [completedAzkar]);
 
     const t = useMemo(() => I18N[language] || I18N.ar, [language]);
 
@@ -258,6 +266,39 @@ const AzkarApp = () => {
         showToast(t.duaDeleted, "info");
     }, [t]);
 
+    // Auto-advance: scroll to the next incomplete zikr after finishing one
+    const scrollToNextZikr = useCallback((currentId, list, type) => {
+        const currentIndex = list.findIndex(zikr => `${type}_${zikr.id}` === currentId);
+        if (currentIndex === -1) return;
+
+        // Find the next incomplete zikr after the current one
+        const nextIncomplete = list.slice(currentIndex + 1).find(
+            zikr => !completedAzkarRef.current[`${type}_${zikr.id}`]
+        );
+
+        if (nextIncomplete) {
+            const nextId = `${type}_${nextIncomplete.id}`;
+            // Highlight and scroll with a delay for the completion animation to play
+            setTimeout(() => {
+                setHighlightedZikr(nextId);
+                const nextElement = document.getElementById(`zikr-${nextId}`);
+                if (nextElement) {
+                    nextElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                // Remove highlight after 2 seconds
+                setTimeout(() => setHighlightedZikr(null), 2500);
+            }, 600);
+        } else {
+            // All done! Show a congratulations toast
+            setTimeout(() => {
+                const allDone = list.every(zikr => completedAzkarRef.current[`${type}_${zikr.id}`] || `${type}_${zikr.id}` === currentId);
+                if (allDone) {
+                    showToast(language === "en" ? "🎉 All azkar completed!" : "🎉 تم إتمام جميع الأذكار!", "success", 3000);
+                }
+            }, 600);
+        }
+    }, [language]);
+
     const handleZikrProgress = useCallback((id, count, list, type) => {
         if (completedAzkar[id]) {
             return;
@@ -286,29 +327,19 @@ const AzkarApp = () => {
                         navigator.vibrate([100, 50, 100]);
                     }
                 }
-                // Auto-scroll to next incomplete zikr
-                const currentIndex = list.findIndex(zikr => `${type}_${zikr.id}` === id);
-                const nextIncomplete = list.slice(currentIndex + 1).find(zikr => !completedAzkar[`${type}_${zikr.id}`]);
-                if (nextIncomplete) {
-                    const nextId = `${type}_${nextIncomplete.id}`;
-                    setTimeout(() => {
-                        const nextElement = document.getElementById(`zikr-${nextId}`);
-                        if (nextElement) {
-                            nextElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    }, 500); // Delay to allow completion animation
-                }
+                // Trigger auto-advance to next incomplete zikr
+                scrollToNextZikr(id, list, type);
                 return { ...current, [id]: true };
             });
         }
-    }, [azkarProgress, completedAzkar, t]);
+    }, [azkarProgress, completedAzkar, t, scrollToNextZikr]);
 
     const toggleZikrComplete = useCallback((id, count) => {
         const nextCompleted = !completedAzkar[id];
-        
+
         setCompletedAzkar((prev) => ({ ...prev, [id]: nextCompleted }));
         setAzkarProgress((prev) => ({ ...prev, [id]: nextCompleted ? count : 0 }));
-        
+
         showToast(nextCompleted ? t.progressCompleted : t.progressResetOne, nextCompleted ? "success" : "info");
     }, [completedAzkar, t]);
 
@@ -349,12 +380,14 @@ const AzkarApp = () => {
                 const isExpanded = Boolean(expandedBenefits[uniqueId]);
                 const progressPct = Math.min((progress / zikr.count) * 100, 100);
                 const isAnimating = countAnimation === uniqueId;
+                const isHighlighted = highlightedZikr === uniqueId;
 
                 return (
                     <ZikrCard
                         key={uniqueId}
                         zikr={zikr}
                         index={index}
+                        uniqueId={uniqueId}
                         t={t}
                         language={language}
                         isCompleted={isCompleted}
@@ -362,6 +395,7 @@ const AzkarApp = () => {
                         isExpanded={isExpanded}
                         progressPct={progressPct}
                         isAnimating={isAnimating}
+                        isHighlighted={isHighlighted}
                         onToggleBenefit={() => setExpandedBenefits((prev) => ({ ...prev, [uniqueId]: !prev[uniqueId] }))}
                         onToggleComplete={() => toggleZikrComplete(uniqueId, zikr.count)}
                         onProgress={(event, buttonRef) => {
@@ -414,12 +448,13 @@ const AzkarApp = () => {
             <ToastContainer />
             <ScrollToTop t={t} />
 
-            <header className="sticky top-0 z-50 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800/50">
+            {/* Header */}
+            <header className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800/50 shadow-sm">
                 <div className="container mx-auto px-4 py-3 md:py-4">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 group">
-                            <div className="flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-white ring-1 ring-slate-200/70 shadow-md transition-transform duration-300 group-hover:scale-105">
-                                <img src="azkari_logo.png" alt="حصنك" className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-sm" />
+                        <div className="flex items-center gap-3 group cursor-pointer" onClick={() => handleTabChange("morning")}>
+                            <div className="flex h-11 w-11 md:h-13 md:w-13 items-center justify-center rounded-2xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-700 ring-1 ring-slate-200/70 dark:ring-slate-600/50 shadow-md transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg">
+                                <img src="hesnok_logo.png" alt="حصنك" className="w-9 h-9 md:w-11 md:h-11 object-contain drop-shadow-sm rounded-xl" />
                             </div>
                             <div>
                                 <h1 className="text-lg md:text-2xl font-black text-[#423E87] dark:text-[#D4A76A] tracking-tight leading-tight">{t.appName}</h1>
@@ -429,26 +464,24 @@ const AzkarApp = () => {
 
                         <div className="flex items-center gap-2">
                             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold border border-slate-200/70 dark:border-slate-700/50">
-                                <Clock className="w-4 h-4 text-emerald-500" />
+                                <Clock className="w-4 h-4 text-[#D4A76A]" />
                                 <span className="text-sm font-mono tracking-wider">{formatTime()}</span>
                             </div>
 
-                            <div className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border ${
-                                isOffline
+                            <div className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border ${isOffline
                                     ? "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-amber-200/70 dark:border-amber-800/50"
                                     : "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-200/70 dark:border-emerald-800/50"
-                            }`}>
+                                }`}>
                                 {isOffline ? <WifiOff className="w-3.5 h-3.5" /> : <Wifi className="w-3.5 h-3.5" />}
                                 <span>{isOffline ? t.offline : t.online}</span>
                             </div>
 
                             <button
                                 onClick={() => handleTabChange("settings")}
-                                className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition-all ${
-                                    activeTab === "settings"
-                                        ? "bg-[#423E87] text-white border-[#423E87]"
+                                className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition-all ${activeTab === "settings"
+                                        ? "bg-[#423E87] text-white border-[#423E87] shadow-md shadow-[#423E87]/20"
                                         : "bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200/70 dark:border-slate-700/50 hover:border-[#D4A76A]"
-                                }`}
+                                    }`}
                                 aria-label={t.openSettings}
                             >
                                 <Settings className="w-4 h-4" />
@@ -457,7 +490,7 @@ const AzkarApp = () => {
 
                             <button
                                 onClick={toggleDarkMode}
-                                className="p-2.5 rounded-xl bg-slate-50 dark:bg-emerald-500/10 text-slate-500 dark:text-emerald-400 border border-slate-200/70 dark:border-emerald-500/20 hover:scale-105 active:scale-95 transition-all"
+                                className="p-2.5 rounded-xl bg-slate-50 dark:bg-[#D4A76A]/10 text-slate-500 dark:text-[#D4A76A] border border-slate-200/70 dark:border-[#D4A76A]/20 hover:scale-105 active:scale-95 transition-all"
                                 aria-label={isDarkMode ? t.lightOn : t.darkOn}
                             >
                                 {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -468,11 +501,12 @@ const AzkarApp = () => {
 
                 {DAILY_TAB_IDS.includes(activeTab) && (
                     <div className="h-1 w-full bg-slate-100 dark:bg-slate-800">
-                        <div className="h-full bg-gradient-to-l from-emerald-400 to-emerald-600 transition-all duration-1000 ease-out" style={{ width: `${progressPercentage}%` }} />
+                        <div className="h-full bg-gradient-to-l from-[#D4A76A] to-[#B18F67] transition-all duration-1000 ease-out" style={{ width: `${progressPercentage}%` }} />
                     </div>
                 )}
             </header>
 
+            {/* Desktop Tab Navigation */}
             <div className="hidden md:block container mx-auto px-4 py-6">
                 <div className="max-w-3xl mx-auto">
                     <div className="p-1.5 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50 flex gap-1 overflow-x-auto no-scrollbar scroll-smooth">
@@ -480,11 +514,10 @@ const AzkarApp = () => {
                             <button
                                 key={tab.id}
                                 onClick={() => handleTabChange(tab.id)}
-                                className={`flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl transition-all duration-300 whitespace-nowrap font-bold text-sm ${
-                                    activeTab === tab.id
+                                className={`flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl transition-all duration-300 whitespace-nowrap font-bold text-sm ${activeTab === tab.id
                                         ? `bg-gradient-to-br ${tab.color} text-white shadow-lg scale-[1.02]`
                                         : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900"
-                                }`}
+                                    }`}
                             >
                                 <tab.icon className="w-4.5 h-4.5" />
                                 <span>{tab.labelText}</span>
@@ -494,6 +527,7 @@ const AzkarApp = () => {
                 </div>
             </div>
 
+            {/* Main Content */}
             <main ref={mainRef} className="container mx-auto px-4 py-6 md:py-8">
                 <div className="max-w-3xl mx-auto">
                     <StreakBanner streakCount={streak.count} goals={goals} t={t} />
@@ -546,18 +580,20 @@ const AzkarApp = () => {
                 </div>
             </main>
 
+            {/* Footer */}
             <footer className="bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 py-10 md:py-14 mt-12">
                 <div className="container mx-auto px-4 text-center">
                     <p className="text-slate-400 dark:text-slate-500 font-bold mb-4 tracking-widest text-xs uppercase">تطبيق الأذكار اليومية</p>
-                    <h2 className="text-xl md:text-2xl font-amiri text-slate-700 dark:text-slate-300 mb-6 italic">"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ"</h2>
+                    <h2 className="text-xl md:text-2xl font-amiri text-slate-700 dark:text-slate-300 mb-6 italic">"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ"</h2>
                     <div className="flex items-center justify-center gap-4">
                         <div className="w-10 h-px bg-slate-200 dark:bg-slate-800" />
-                        <BookOpen className="w-6 h-6 text-emerald-500 opacity-50" />
+                        <BookOpen className="w-6 h-6 text-[#D4A76A] opacity-50" />
                         <div className="w-10 h-px bg-slate-200 dark:bg-slate-800" />
                     </div>
                 </div>
             </footer>
 
+            {/* Bottom Navigation (Mobile) */}
             <nav className="bottom-nav" role="navigation" aria-label={t.navLabel}>
                 {tabs.map((tab) => (
                     <button

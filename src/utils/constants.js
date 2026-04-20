@@ -9,8 +9,12 @@ if (!window.AZKAR_DATA) {
         defaultCustomDuas: [],
         tabs: []
     };
+} else {
+    console.log('AZKAR_DATA loaded successfully:', Object.keys(window.AZKAR_DATA));
 }
 export const { azkar, defaultCustomDuas, tabs: tabConfig } = window.AZKAR_DATA;
+
+console.log('Constants loaded:', { azkar: !!azkar, defaultCustomDuas: !!defaultCustomDuas, tabConfig: !!tabConfig });
 export const DAILY_TAB_IDS = ["morning", "evening", "sleeping", "prayer_azkar"];
 export const OFFLINE_PRAYER_TIMES = {
     Fajr: "04:45", Sunrise: "06:15", Dhuhr: "11:50", Asr: "15:10", Maghrib: "17:30", Isha: "19:00"
