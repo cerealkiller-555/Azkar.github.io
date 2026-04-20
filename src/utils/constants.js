@@ -1,18 +1,9 @@
 import { Clock, Moon, Sun, BookOpen, Heart, Settings } from 'lucide-react';
+import AZKAR_DATA from '../data/azkar-data.js';
 
 export const ICONS = { Clock, Moon, Sun, BookOpen, Heart, Settings };
-// window.AZKAR_DATA is assumed to be loaded globally or imported. For now we use the global from azkar-data.js
-if (!window.AZKAR_DATA) {
-    console.error("AZKAR_DATA not loaded. Please check if azkar-data.js is included.");
-    window.AZKAR_DATA = {
-        azkar: { morning: [], evening: [], sleeping: [], prayerAzkar: [] },
-        defaultCustomDuas: [],
-        tabs: []
-    };
-} else {
-    console.log('AZKAR_DATA loaded successfully:', Object.keys(window.AZKAR_DATA));
-}
-export const { azkar, defaultCustomDuas, tabs: tabConfig } = window.AZKAR_DATA;
+
+export const { azkar, defaultCustomDuas, tabs: tabConfig } = AZKAR_DATA;
 
 console.log('Constants loaded:', { azkar: !!azkar, defaultCustomDuas: !!defaultCustomDuas, tabConfig: !!tabConfig });
 export const DAILY_TAB_IDS = ["morning", "evening", "sleeping", "prayer_azkar"];

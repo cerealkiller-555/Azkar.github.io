@@ -22,3 +22,13 @@ if (rootElement) {
 } else {
   console.error('Root element not found!');
 }
+
+// Register service worker for PWA support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    const swUrl = `${import.meta.env.BASE_URL}sw.js`;
+    navigator.serviceWorker.register(swUrl)
+      .then((reg) => console.log('Service Worker registered:', reg.scope))
+      .catch((err) => console.log('Service Worker registration failed:', err));
+  });
+}
