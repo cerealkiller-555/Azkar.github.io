@@ -2,12 +2,32 @@ import React, { useMemo, useState } from 'react';
 
 const LoginScreen = ({ onLogin, t, language }) => {
     const [form, setForm] = useState({ name: "", email: "" });
+    const [errors, setErrors] = useState({ name: false, email: false });
     const [mode, setMode] = useState("signin");
 
     const isCreateMode = mode === "create";
     const title = useMemo(() => (isCreateMode ? t.createAccountTitle : t.loginTitle), [isCreateMode, t]);
     const subtitle = useMemo(() => (isCreateMode ? t.createAccountSubtitle : t.loginSubtitle), [isCreateMode, t]);
     const actionLabel = useMemo(() => (isCreateMode ? t.createAccountButton : t.loginButton), [isCreateMode, t]);
+
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
+    const handleSubmit = () => {
+        const nameError = !form.name.trim();
+        const emailError = !form.email.trim() || !validateEmail(form.email);
+        
+        setErrors({ name: nameError, email: emailError });
+        
+        if (!nameError && !emailError) {
+            onLogin(form);
+        }
+    };
 
     return (
         <div
@@ -125,18 +145,23 @@ const LoginScreen = ({ onLogin, t, language }) => {
                     {/* Form fields */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div>
-                            <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', display: 'block', marginBottom: '0.5rem' }} htmlFor="login-name">{t.nameLabel}</label>
+                            <label style={{ fontSize: '0.75rem', fontWeight: 800, color: errors.name ? '#ef4444' : '#94a3b8', display: 'block', marginBottom: '0.5rem' }} htmlFor="login-name">
+                                {t.nameLabel} {errors.name && "*"}
+                            </label>
                             <input
                                 id="login-name"
                                 type="text"
                                 value={form.name}
-                                onChange={(event) => setForm({ ...form, name: event.target.value })}
+                                onChange={(event) => {
+                                    setForm({ ...form, name: event.target.value });
+                                    if (errors.name) setErrors({ ...errors, name: false });
+                                }}
                                 style={{
                                     width: '100%',
                                     padding: '0.875rem 1rem',
                                     borderRadius: '1rem',
                                     background: '#f8fafc',
-                                    border: '1.5px solid #e2e8f0',
+                                    border: `1.5px solid ${errors.name ? '#ef4444' : '#e2e8f0'}`,
                                     outline: 'none',
                                     color: '#1e293b',
                                     fontWeight: 700,
@@ -144,24 +169,29 @@ const LoginScreen = ({ onLogin, t, language }) => {
                                     fontFamily: 'inherit',
                                     transition: 'border-color 0.3s'
                                 }}
-                                onFocus={(e) => e.target.style.borderColor = '#D4A76A'}
-                                onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                                onFocus={(e) => { if(!errors.name) e.target.style.borderColor = '#D4A76A' }}
+                                onBlur={(e) => { if(!errors.name) e.target.style.borderColor = '#e2e8f0' }}
                                 placeholder={language === "en" ? "Your name" : "اكتب اسمك"}
                             />
                         </div>
                         <div>
-                            <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', display: 'block', marginBottom: '0.5rem' }} htmlFor="login-email">{t.emailLabel}</label>
+                            <label style={{ fontSize: '0.75rem', fontWeight: 800, color: errors.email ? '#ef4444' : '#94a3b8', display: 'block', marginBottom: '0.5rem' }} htmlFor="login-email">
+                                {t.emailLabel} {errors.email && "*"}
+                            </label>
                             <input
                                 id="login-email"
                                 type="email"
                                 value={form.email}
-                                onChange={(event) => setForm({ ...form, email: event.target.value })}
+                                onChange={(event) => {
+                                    setForm({ ...form, email: event.target.value });
+                                    if (errors.email) setErrors({ ...errors, email: false });
+                                }}
                                 style={{
                                     width: '100%',
                                     padding: '0.875rem 1rem',
                                     borderRadius: '1rem',
                                     background: '#f8fafc',
-                                    border: '1.5px solid #e2e8f0',
+                                    border: `1.5px solid ${errors.email ? '#ef4444' : '#e2e8f0'}`,
                                     outline: 'none',
                                     color: '#1e293b',
                                     fontWeight: 700,
@@ -169,8 +199,8 @@ const LoginScreen = ({ onLogin, t, language }) => {
                                     fontFamily: 'inherit',
                                     transition: 'border-color 0.3s'
                                 }}
-                                onFocus={(e) => e.target.style.borderColor = '#D4A76A'}
-                                onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                                onFocus={(e) => { if(!errors.email) e.target.style.borderColor = '#D4A76A' }}
+                                onBlur={(e) => { if(!errors.email) e.target.style.borderColor = '#e2e8f0' }}
                                 placeholder={language === "en" ? "name@example.com" : "name@example.com"}
                             />
                         </div>
@@ -178,7 +208,7 @@ const LoginScreen = ({ onLogin, t, language }) => {
                         {/* Submit button - branded */}
                         <button
                             type="button"
-                            onClick={() => onLogin(form)}
+                            onClick={handleSubmit}
                             style={{
                                 width: '100%',
                                 padding: '0.875rem',

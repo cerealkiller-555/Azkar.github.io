@@ -5,8 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  // Must match the GitHub Pages repo name for correct asset paths
-  base: '/Azkar/',
+  // Updated base to match the user's provided GitHub Pages URL
+  base: '/Azkar.github.io/',
   build: {
     outDir: 'docs',
     assetsDir: 'assets',

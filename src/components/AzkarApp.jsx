@@ -538,6 +538,8 @@ const AzkarApp = () => {
                         totalCount={currentAzkarList.length}
                         resetAllProgress={resetAllProgress}
                         t={t}
+                        userProfile={userProfile}
+                        language={language}
                     />
 
                     {activeTab === "morning" && renderAzkarList(azkar.morning, "morning")}

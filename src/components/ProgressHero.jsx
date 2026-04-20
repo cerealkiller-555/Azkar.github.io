@@ -3,7 +3,7 @@ import { Clock, Moon, Sun, MapPin, BookOpen, Plus, Settings, CheckCircle, Share2
 import { ICONS, DAILY_TAB_IDS, OFFLINE_PRAYER_TIMES, PRAYER_CHECKLIST, I18N, azkar, defaultCustomDuas, tabConfig } from '../utils/constants';
 import { showToast, readJson, readDailyState, dateKey, isSameDay, isYesterday, subscribeToToasts, toastQueue } from '../utils/helpers';
 
-const ProgressHero = ({ activeTab, progressPercentage, completedCount, totalCount, resetAllProgress, t }) => {
+const ProgressHero = ({ activeTab, progressPercentage, completedCount, totalCount, resetAllProgress, t, userProfile, language }) => {
     if (!DAILY_TAB_IDS.includes(activeTab)) {
         return null;
     }
@@ -30,6 +30,10 @@ const ProgressHero = ({ activeTab, progressPercentage, completedCount, totalCoun
             ? Moon
             : BookOpen;
 
+    const greeting = userProfile?.name
+        ? (language === "en" ? `Welcome, ${userProfile.name}` : `أهلاً بك، ${userProfile.name}`)
+        : null;
+
     return (
         <div className={`mb-8 p-6 md:p-8 rounded-3xl bg-gradient-to-br transition-all duration-500 shadow-2xl relative overflow-hidden ${themeClass} text-white`}>
             <div className="absolute top-0 right-0 p-6 opacity-[0.08] float-slow">
@@ -39,6 +43,7 @@ const ProgressHero = ({ activeTab, progressPercentage, completedCount, totalCoun
             <div className="relative z-10">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                     <div>
+                        {greeting && <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-1">{greeting}</p>}
                         <h2 className="text-2xl md:text-4xl font-black mb-2">{title}</h2>
                         <p className="text-white/70 text-sm md:text-base font-medium">
                             {t.progressText} {completedCount} {t.progressOf} {totalCount} {t.progressAzkar} • {progressPercentage}%
