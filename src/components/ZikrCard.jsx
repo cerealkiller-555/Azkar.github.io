@@ -108,7 +108,7 @@ const ZikrCard = ({
                     <p className={`font-amiri text-2xl md:text-4xl leading-[1.8] text-center transition-all duration-700 ${
                         isCompleted 
                             ? "text-slate-400 dark:text-slate-500 scale-95" 
-                            : "text-slate-800 dark:text-slate-100"
+                            : "text-black dark:text-white"
                     }`}>
                         {zikr.text}
                     </p>
