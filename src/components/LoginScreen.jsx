@@ -35,8 +35,8 @@ const LoginScreen = ({ onLogin, t, language }) => {
             dir={language === "en" ? "ltr" : "rtl"}
             style={{
                 fontFamily: language === "en" ? "'Inter', sans-serif" : "'Cairo', sans-serif",
-                background: 'linear-gradient(160deg, #f8fafc 0%, #EADEC9 50%, #f8fafc 100%)',
-                color: '#1e293b'
+                background: 'linear-gradient(160deg, #FFFFFF 0%, #FDFBF7 100%)',
+                color: '#0f172a'
             }}
         >
             {/* Decorative background elements */}
@@ -84,9 +84,9 @@ const LoginScreen = ({ onLogin, t, language }) => {
                             letterSpacing: '-0.02em'
                         }}>{title}</h1>
                         <p style={{
-                            fontSize: '0.875rem',
-                            color: '#94a3b8',
-                            fontWeight: 500
+                            fontSize: '0.9375rem',
+                            color: '#475569',
+                            fontWeight: 600
                         }}>{subtitle}</p>
                     </div>
 
@@ -261,9 +261,9 @@ const LoginScreen = ({ onLogin, t, language }) => {
                             border: '1px solid rgba(212,167,106,0.25)',
                             background: 'rgba(212,167,106,0.08)',
                             padding: '0.875rem 1rem',
-                            fontSize: '0.8125rem',
-                            color: '#64748b',
-                            fontWeight: 500
+                            fontSize: '0.875rem',
+                            color: '#1e293b',
+                            fontWeight: 600
                         }}>
                             {t.settingsHint}
                         </div>

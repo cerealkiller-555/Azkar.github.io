@@ -7,8 +7,8 @@ const PrayerChecklist = ({ checklist, onToggle, language, t }) => (
     <div className="mt-8 p-6 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-100 dark:border-slate-700/50 shadow-lg">
         <div className="flex items-center justify-between mb-4">
             <div>
-                <h3 className="text-xl font-black text-slate-800 dark:text-white">{t.prayerChecklistTitle}</h3>
-                <p className="text-sm text-slate-400 dark:text-slate-500 font-medium">{t.prayerChecklistNote}</p>
+                <h3 className="text-xl font-black text-slate-900 dark:text-white">{t.prayerChecklistTitle}</h3>
+                <p className="text-sm text-slate-600 dark:text-slate-500 font-medium">{t.prayerChecklistNote}</p>
             </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
@@ -21,7 +21,7 @@ const PrayerChecklist = ({ checklist, onToggle, language, t }) => (
                         className={`p-3 rounded-2xl border text-sm font-bold transition-all ${
                             checked
                                 ? "bg-[#423E87] text-white border-[#423E87] shadow-md shadow-[#423E87]/20"
-                                : "bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-300 border-slate-200 dark:border-slate-700"
+                                : "bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700"
                         }`}
                     >
                         {language === "en" ? prayer.en : prayer.ar}

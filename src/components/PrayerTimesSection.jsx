@@ -27,8 +27,8 @@ const PrayerTimesSection = ({ prayerTimes, location, t, language }) => {
     return (
         <div className="animate-slide-up">
             <div className="mb-6 text-center">
-                <h2 className="text-2xl md:text-3xl font-black text-slate-800 dark:text-white mb-2">{t.prayerTimesTitle}</h2>
-                <p className="text-sm text-slate-400 dark:text-slate-500 font-medium">
+                <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mb-2">{t.prayerTimesTitle}</h2>
+                <p className="text-sm text-slate-600 dark:text-slate-500 font-medium">
                     {location.city} — {new Date().toLocaleDateString(language === "en" ? "en-US" : "ar-EG", {
                         weekday: "long",
                         year: "numeric",

@@ -36,7 +36,7 @@ const SettingsSection = ({
         )}
 
         <div className="p-6 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50">
-                <h3 className="text-xl font-black text-slate-800 dark:text-white mb-6 flex items-center gap-3">
+                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-6 flex items-center gap-3">
                     <MapPin className="w-6 h-6 text-[#D4A76A]" />
                     {t.locationTitle}
                 </h3>
@@ -65,7 +65,7 @@ const SettingsSection = ({
         </div>
 
         <div className="p-6 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50">
-            <h3 className="text-xl font-black text-slate-800 dark:text-white mb-6 flex items-center gap-3">
+            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-6 flex items-center gap-3">
                 {isDarkMode ? <Moon className="w-6 h-6 text-indigo-400" /> : <Sun className="w-6 h-6 text-amber-500" />}
                 {t.appearanceTitle}
             </h3>
@@ -73,7 +73,7 @@ const SettingsSection = ({
                 onClick={toggleDarkMode}
                 className="w-full flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-[#D4A76A] dark:hover:border-[#D4A76A] transition-all"
             >
-                <span className="text-slate-700 dark:text-slate-300 font-bold">{isDarkMode ? t.darkOn : t.lightOn}</span>
+                <span className="text-slate-800 dark:text-slate-300 font-bold">{isDarkMode ? t.darkOn : t.lightOn}</span>
                 <div className={`w-12 h-7 rounded-full transition-colors duration-300 flex items-center p-1 ${isDarkMode ? "bg-[#D4A76A]" : "bg-slate-300"}`}>
                     <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300 ${isDarkMode ? "-translate-x-5" : ""}`} />
                 </div>
@@ -81,7 +81,7 @@ const SettingsSection = ({
         </div>
 
         <div className="p-6 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50">
-            <h3 className="text-xl font-black text-slate-800 dark:text-white mb-6 flex items-center gap-3">
+            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-6 flex items-center gap-3">
                 <Settings className="w-6 h-6 text-[#D4A76A]" />
                 {t.languageTitle}
             </h3>
@@ -91,7 +91,7 @@ const SettingsSection = ({
                     className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${
                         language === "ar"
                             ? "bg-[#423E87] text-white border-[#423E87]"
-                            : "bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-300 border-slate-200 dark:border-slate-700"
+                            : "bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700"
                     }`}
                 >
                     {t.languageAr}
@@ -101,7 +101,7 @@ const SettingsSection = ({
                     className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${
                         language === "en"
                             ? "bg-[#423E87] text-white border-[#423E87]"
-                            : "bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-300 border-slate-200 dark:border-slate-700"
+                            : "bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700"
                     }`}
                 >
                     {t.languageEn}
@@ -110,11 +110,11 @@ const SettingsSection = ({
         </div>
 
         <div className="p-6 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50">
-            <h3 className="text-xl font-black text-slate-800 dark:text-white mb-4 flex items-center gap-3">
+            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4 flex items-center gap-3">
                 <Heart className="w-6 h-6 text-[#CC6243]" />
                 {t.profileTitle}
             </h3>
-            <p className="text-sm text-slate-400 dark:text-slate-500 mb-4 font-medium">{t.profileNote}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-500 mb-4 font-medium">{t.profileNote}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                     <label className="text-xs font-black text-slate-400 dark:text-slate-500 mr-1" htmlFor="profile-name">{t.nameLabel}</label>
@@ -146,7 +146,7 @@ const SettingsSection = ({
                 </button>
                 <button
                     onClick={logout}
-                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-300 text-sm font-bold hover:bg-slate-200 dark:hover:bg-slate-800 transition-all"
+                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 text-sm font-bold hover:bg-slate-200 dark:hover:bg-slate-800 transition-all"
                 >
                     {t.logoutButton}
                 </button>
@@ -154,7 +154,7 @@ const SettingsSection = ({
         </div>
 
         <div className="p-6 bg-white dark:bg-slate-800/90 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/50">
-            <h3 className="text-xl font-black text-slate-800 dark:text-white mb-4 flex items-center gap-3">
+            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-4 flex items-center gap-3">
                 <Download className="w-6 h-6 text-[#D4A76A]" />
                 {t.aboutTitle}
             </h3>
@@ -164,12 +164,12 @@ const SettingsSection = ({
                     <span className="text-xs text-[#B18F67] dark:text-[#B18F67] font-medium">PWA</span>
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
-                    <span className="text-sm text-slate-600 dark:text-slate-400 font-bold">💾 يحفظ تقدمك تلقائياً</span>
-                    <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">localStorage</span>
+                    <span className="text-sm text-slate-700 dark:text-slate-400 font-bold">💾 يحفظ تقدمك تلقائياً</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-500 font-medium">localStorage</span>
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
-                    <span className="text-sm text-slate-600 dark:text-slate-400 font-bold">🔄 يُعاد التعيين تلقائياً كل يوم</span>
-                    <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">يومي</span>
+                    <span className="text-sm text-slate-700 dark:text-slate-400 font-bold">🔄 يُعاد التعيين تلقائياً كل يوم</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-500 font-medium">يومي</span>
                 </div>
             </div>
         </div>

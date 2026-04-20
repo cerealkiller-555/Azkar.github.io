@@ -105,10 +105,10 @@ const ZikrCard = ({
 
                 {/* Arabic text with beautiful typography */}
                 <div className="relative mb-8">
-                    <p className={`font-amiri text-2xl md:text-4xl leading-[1.8] text-center transition-all duration-700 ${
+                    <p className={`font-amiri text-2xl md:text-5xl leading-[1.8] text-center transition-all duration-700 ${
                         isCompleted 
                             ? "text-[#10b981] dark:text-[#34d399] opacity-90 scale-95" 
-                            : "text-black dark:text-white"
+                            : "text-[#0f172a] dark:text-[#f8fafc]"
                     }`}>
                         {zikr.text}
                     </p>
@@ -179,12 +179,12 @@ const ZikrCard = ({
                                     {meaning && (
                                         <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
                                             <span className="block text-[10px] font-black uppercase tracking-widest text-[#D4A76A] mb-2">{t.meaningTitle}</span>
-                                            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed italic">{meaning}</p>
+                                            <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed italic font-medium">{meaning}</p>
                                         </div>
                                     )}
                                     {benefit && (
                                         <div className="p-5 rounded-2xl bg-[#423E87]/5 dark:bg-[#D4A76A]/5 border border-[#423E87]/10 dark:border-[#D4A76A]/10">
-                                            <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">{benefit}</p>
+                                            <p className="text-sm text-slate-900 dark:text-white leading-relaxed font-medium">{benefit}</p>
                                         </div>
                                     )}
                                     {source && (

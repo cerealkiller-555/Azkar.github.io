@@ -20,7 +20,7 @@ const AzkarApp = () => {
     const [activeTab, setActiveTab] = useState(() => localStorage.getItem("azkar_activeTab") || "morning");
     const [prayerTimes, setPrayerTimes] = useState(null);
     const [location, setLocation] = useState(() => readJson("azkar_location", { city: "Cairo", country: "EG" }));
-    const [customDuas, setCustomDuas] = useState(() => readJson("azkar_customDuas", defaultCustomDuas));
+    const [customDuas, setCustomDuas] = useState(() => readJson("azkar_customDuas", defaultCustomDuas).map(d => typeof d === 'string' ? { id: Date.now() + Math.random(), text: d } : d));
     const [newDua, setNewDua] = useState("");
     const [currentTime, setCurrentTime] = useState(new Date());
     
@@ -43,12 +43,31 @@ const AzkarApp = () => {
     useEffect(() => {
         if (!isLoggedIn) return;
         
-        // Load data with user-specific keys
-        setCompletedAzkar(readDailyState(`azkar_completed${userSuffix}`));
-        setAzkarProgress(readDailyState(`azkar_progress${userSuffix}`));
-        setPrayerChecklist(readDailyState(`azkar_prayerChecklist${userSuffix}`));
-        setStreak(readJson(`azkar_streak${userSuffix}`, { count: 0, lastDate: null }));
-    }, [isLoggedIn, userSuffix]);
+        // Initial setup for user suffix
+        const suffix = `_${userProfile.email}`;
+
+        // 1. Load from local first (fast UI response)
+        setCompletedAzkar(readDailyState(`azkar_completed${suffix}`));
+        setAzkarProgress(readDailyState(`azkar_progress${suffix}`));
+        setPrayerChecklist(readDailyState(`azkar_prayerChecklist${suffix}`));
+        setStreak(readJson(`azkar_streak${suffix}`, { count: 0, lastDate: null }));
+        
+        // 2. Fetch from backend to sync (background update)
+        if (!isOffline) {
+            const today = new Date().toDateString();
+            fetch(`/api/sync/${userProfile.email}/${encodeURIComponent(today)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    
+                    if (data.progress) setAzkarProgress(prev => ({ ...prev, ...data.progress }));
+                    if (data.completed) setCompletedAzkar(prev => ({ ...prev, ...data.completed }));
+                    if (data.checklist) setPrayerChecklist(prev => ({ ...prev, ...data.checklist }));
+                    if (data.streak) setStreak(data.streak);
+                })
+                .catch(err => console.error("Sync fetch error:", err));
+        }
+    }, [isLoggedIn, userProfile.email, isOffline]);
 
     const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("azkarDarkMode") === "true");
     const [language, setLanguage] = useState(() => localStorage.getItem("azkar_language") || "ar");
@@ -145,32 +164,67 @@ const AzkarApp = () => {
     // Save logic with userSuffix
     useEffect(() => {
         if (!isLoggedIn) return;
-        localStorage.setItem(`azkar_progress${userSuffix}`, JSON.stringify({
+        const data = {
             date: new Date().toDateString(),
             items: azkarProgress
-        }));
-    }, [azkarProgress, userSuffix, isLoggedIn]);
+        };
+        localStorage.setItem(`azkar_progress${userSuffix}`, JSON.stringify(data));
+        
+        if (!isOffline) {
+            fetch('/api/sync/state', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: userProfile.email, date: data.date, type: 'progress', data: azkarProgress })
+            }).catch(console.error);
+        }
+    }, [azkarProgress, userSuffix, isLoggedIn, isOffline, userProfile.email]);
 
     useEffect(() => {
         if (!isLoggedIn) return;
-        localStorage.setItem(`azkar_completed${userSuffix}`, JSON.stringify({
+        const data = {
             date: new Date().toDateString(),
             items: completedAzkar
-        }));
-    }, [completedAzkar, userSuffix, isLoggedIn]);
+        };
+        localStorage.setItem(`azkar_completed${userSuffix}`, JSON.stringify(data));
+        
+        if (!isOffline) {
+            fetch('/api/sync/state', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: userProfile.email, date: data.date, type: 'completed', data: completedAzkar })
+            }).catch(console.error);
+        }
+    }, [completedAzkar, userSuffix, isLoggedIn, isOffline, userProfile.email]);
 
     useEffect(() => {
         if (!isLoggedIn) return;
-        localStorage.setItem(`azkar_prayerChecklist${userSuffix}`, JSON.stringify({
+        const data = {
             date: new Date().toDateString(),
             items: prayerChecklist
-        }));
-    }, [prayerChecklist, userSuffix, isLoggedIn]);
+        };
+        localStorage.setItem(`azkar_prayerChecklist${userSuffix}`, JSON.stringify(data));
+        
+        if (!isOffline) {
+            fetch('/api/sync/state', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: userProfile.email, date: data.date, type: 'checklist', data: prayerChecklist })
+            }).catch(console.error);
+        }
+    }, [prayerChecklist, userSuffix, isLoggedIn, isOffline, userProfile.email]);
 
     useEffect(() => {
         if (!isLoggedIn) return;
         localStorage.setItem(`azkar_streak${userSuffix}`, JSON.stringify(streak));
-    }, [streak, userSuffix, isLoggedIn]);
+        
+        if (!isOffline) {
+            fetch('/api/sync/streak', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: userProfile.email, streak })
+            }).catch(console.error);
+        }
+    }, [streak, userSuffix, isLoggedIn, isOffline, userProfile.email]);
 
     useEffect(() => {
         localStorage.setItem("azkar_customDuas", JSON.stringify(customDuas));
@@ -250,41 +304,80 @@ const AzkarApp = () => {
         setIsDarkMode((prev) => !prev);
     }, []);
 
+    // Sync dark mode class with HTML element for Tailwind
+    useEffect(() => {
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [isDarkMode]);
+
     const handleLogin = useCallback((profile, mode) => {
         const cleaned = { 
             name: profile.name.trim(), 
             email: profile.email.trim().toLowerCase() 
         };
         
-        const registry = readJson("azkar_users_registry", {});
-        const registeredName = registry[cleaned.email];
+        if (isOffline) {
+            // Local-only logic when offline
+            const registry = readJson("azkar_users_registry", {});
+            const registeredName = registry[cleaned.email];
 
-        if (mode === "signin") {
-            if (!registeredName) {
-                showToast(language === "en" ? "Account not found. Please create one first." : "الحساب غير موجود. يرجى إنشاء حساب أولاً.", "error");
+            if (mode === "signin") {
+                if (!registeredName) {
+                    showToast(language === "en" ? "Account not found offline. Please connect to internet." : "الحساب غير موجود محلياً. يرجى الاتصال بالإنترنت.", "error");
+                    return;
+                }
+                const user = { name: registeredName, email: cleaned.email };
+                setUserProfile(user);
+                setIsLoggedIn(true);
+                showToast(language === "en" ? `Welcome back, ${registeredName}! (Offline)` : `أهلاً بعودتك يا ${registeredName}! (بدون إنترنت)`, "success");
+            } else {
+                if (registeredName) {
+                    showToast(language === "en" ? "This email is already registered locally." : "هذا البريد مسجل بالفعل محلياً.", "warning");
+                    return;
+                }
+                registry[cleaned.email] = cleaned.name;
+                localStorage.setItem("azkar_users_registry", JSON.stringify(registry));
+                setUserProfile(cleaned);
+                setIsLoggedIn(true);
+                showToast(language === "en" ? "Account created locally!" : "تم إنشاء الحساب محلياً!", "success");
+            }
+            return;
+        }
+
+        // Online Backend Auth
+        const endpoint = mode === "signin" ? '/api/auth/login' : '/api/auth/register';
+        const body = mode === "signin" ? { email: cleaned.email, mode: 'signin' } : { name: cleaned.name, email: cleaned.email };
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                showToast(language === "en" ? data.error : (mode === "signin" ? "خطأ في تسجيل الدخول" : "خطأ في إنشاء الحساب"), "error");
                 return;
             }
-            
-            // Success: Load the name that was actually registered
-            const user = { name: registeredName, email: cleaned.email };
+            const user = data.user;
             setUserProfile(user);
             setIsLoggedIn(true);
-            showToast(language === "en" ? `Welcome back, ${registeredName}!` : `أهلاً بعودتك يا ${registeredName}!`, "success");
-        } else {
-            // Create account mode
-            if (registeredName) {
-                showToast(language === "en" ? "This email is already registered. Please sign in." : "هذا البريد مسجل بالفعل. يرجى تسجيل الدخول.", "warning");
-                return;
-            }
             
-            // Success: Register new user
-            registry[cleaned.email] = cleaned.name;
+            // Re-sync registry just in case
+            const registry = readJson("azkar_users_registry", {});
+            registry[user.email] = user.name;
             localStorage.setItem("azkar_users_registry", JSON.stringify(registry));
-            setUserProfile(cleaned);
-            setIsLoggedIn(true);
-            showToast(language === "en" ? "Account created successfully!" : "تم إنشاء الحساب بنجاح!", "success");
-        }
-    }, [language]);
+            
+            showToast(language === "en" ? (mode === "signin" ? `Welcome back, ${user.name}!` : "Account created!") : (mode === "signin" ? `أهلاً بعودتك يا ${user.name}!` : "تم إنشاء الحساب بنجاح!"), "success");
+        })
+        .catch(err => {
+            console.error(err);
+            showToast(language === "en" ? "Server connection failed" : "فشل الاتصال بالخادم", "error");
+        });
+    }, [language, isOffline]);
 
     const updateProfile = useCallback((profile) => {
         const cleaned = { name: profile.name.trim(), email: profile.email.trim().toLowerCase() };
@@ -308,19 +401,41 @@ const AzkarApp = () => {
     }, [language]);
 
     const addCustomDua = useCallback(() => {
-        if (!newDua.trim()) {
+        if (!newDua.trim() || !isLoggedIn) {
             return;
         }
 
-        setCustomDuas((prev) => [...prev, newDua.trim()]);
+        const text = newDua.trim();
+        const tempId = Date.now();
+        setCustomDuas((prev) => [...prev, { id: tempId, text }]);
         setNewDua("");
+        
+        if (!isOffline) {
+            fetch('/api/duas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: userProfile.email, dua_text: text })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.dua) {
+                    setCustomDuas(prev => prev.map(d => d.id === tempId ? data.dua : d));
+                }
+            })
+            .catch(console.error);
+        }
         showToast(t.duaAdded);
-    }, [newDua, t]);
+    }, [newDua, t, isLoggedIn, isOffline, userProfile.email]);
 
     const deleteCustomDua = useCallback((index) => {
+        const duaToDelete = customDuas[index];
         setCustomDuas((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+        
+        if (!isOffline && duaToDelete.id) {
+            fetch(`/api/duas/${duaToDelete.id}`, { method: 'DELETE' }).catch(console.error);
+        }
         showToast(t.duaDeleted, "info");
-    }, [t]);
+    }, [customDuas, isOffline, t]);
 
     // Auto-advance: scroll to the next incomplete zikr after finishing one
     const scrollToNextZikr = useCallback((currentId, list, type) => {
@@ -498,7 +613,7 @@ const AzkarApp = () => {
         <div
             className={`min-h-screen transition-colors duration-500 pattern-bg ${isDarkMode ? "dark bg-[#0f172a]" : "bg-[#fdfbf7]"}`}
             dir={language === "en" ? "ltr" : "rtl"}
-            style={{ fontFamily: language === "en" ? "'Inter', sans-serif" : "'Cairo', sans-serif", color: isDarkMode ? '#f8fafc' : '#1e293b' }}
+            style={{ fontFamily: language === "en" ? "'Inter', sans-serif" : "'Cairo', sans-serif", color: isDarkMode ? '#f8fafc' : '#0f172a' }}
         >
             <OfflineBanner offline={isOffline} t={t} />
             <ToastContainer />
@@ -514,12 +629,12 @@ const AzkarApp = () => {
                             </div>
                             <div>
                                 <h1 className="text-lg md:text-2xl font-black text-[#423E87] dark:text-[#D4A76A] tracking-tight leading-tight">{t.appName}</h1>
-                                <p className="text-[10px] md:text-xs text-[#B18F67] dark:text-[#B2AE97] font-bold leading-tight">{t.appTagline}</p>
+                                <p className="text-[10px] md:text-xs text-[#8B4513] dark:text-[#B2AE97] font-bold leading-tight uppercase tracking-widest">{t.appTagline}</p>
                             </div>
                         </div>
 
                         <div className="flex items-center gap-2">
-                            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold border border-slate-200/70 dark:border-slate-700/50">
+                            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-300 font-bold border border-slate-200/70 dark:border-slate-700/50">
                                 <Clock className="w-4 h-4 text-[#D4A76A]" />
                                 <span className="text-sm font-mono tracking-wider">{formatTime()}</span>
                             </div>
@@ -534,9 +649,9 @@ const AzkarApp = () => {
 
                             <button
                                 onClick={() => handleTabChange("settings")}
-                                className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition-all ${activeTab === "settings"
+                                className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-black transition-all ${activeTab === "settings"
                                         ? "bg-[#423E87] text-white border-[#423E87] shadow-md shadow-[#423E87]/20"
-                                        : "bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200/70 dark:border-slate-700/50 hover:border-[#D4A76A]"
+                                        : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200/70 dark:border-slate-700/50 hover:border-[#D4A76A]"
                                     }`}
                                 aria-label={t.openSettings}
                             >
