@@ -23,17 +23,36 @@ const AzkarApp = () => {
     const [customDuas, setCustomDuas] = useState(() => readJson("azkar_customDuas", defaultCustomDuas));
     const [newDua, setNewDua] = useState("");
     const [currentTime, setCurrentTime] = useState(new Date());
-    const [completedAzkar, setCompletedAzkar] = useState(() => readDailyState("azkar_completed"));
-    const [azkarProgress, setAzkarProgress] = useState(() => readDailyState("azkar_progress"));
-    const [prayerChecklist, setPrayerChecklist] = useState(() => readDailyState("azkar_prayerChecklist"));
-    const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("azkarDarkMode") === "true");
-    const [language, setLanguage] = useState(() => localStorage.getItem("azkar_language") || "ar");
+    
+    // Initial login state
     const [userProfile, setUserProfile] = useState(() => readJson("azkar_user", { name: "", email: "" }));
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         const saved = readJson("azkar_user", null);
         return Boolean(saved && (saved.name || saved.email));
     });
-    const [streak, setStreak] = useState(() => readJson("azkar_streak", { count: 0, lastDate: null }));
+
+    const userSuffix = useMemo(() => (isLoggedIn && userProfile.email ? `_${userProfile.email}` : ""), [isLoggedIn, userProfile.email]);
+
+    // Data states - they will be re-initialized in an effect after login
+    const [completedAzkar, setCompletedAzkar] = useState({});
+    const [azkarProgress, setAzkarProgress] = useState({});
+    const [prayerChecklist, setPrayerChecklist] = useState({});
+    const [streak, setStreak] = useState({ count: 0, lastDate: null });
+
+    // Load user-specific data when login changes
+    useEffect(() => {
+        if (!isLoggedIn) return;
+        
+        // Load data with user-specific keys
+        setCompletedAzkar(readDailyState(`azkar_completed${userSuffix}`));
+        setAzkarProgress(readDailyState(`azkar_progress${userSuffix}`));
+        setPrayerChecklist(readDailyState(`azkar_prayerChecklist${userSuffix}`));
+        setStreak(readJson(`azkar_streak${userSuffix}`, { count: 0, lastDate: null }));
+    }, [isLoggedIn, userSuffix]);
+
+    const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("azkarDarkMode") === "true");
+    const [language, setLanguage] = useState(() => localStorage.getItem("azkar_language") || "ar");
+    
     const [expandedBenefits, setExpandedBenefits] = useState({});
     const [countAnimation, setCountAnimation] = useState(null);
     const [isOffline, setIsOffline] = useState(!navigator.onLine);
@@ -49,6 +68,7 @@ const AzkarApp = () => {
 
     const t = useMemo(() => I18N[language] || I18N.ar, [language]);
 
+    // ... currentAzkarList, progressPercentage, completedCount, formatTime ...
     const currentAzkarList = useMemo(() => {
         if (activeTab === "morning") return azkar.morning;
         if (activeTab === "evening") return azkar.evening;
@@ -58,9 +78,7 @@ const AzkarApp = () => {
     }, [activeTab]);
 
     const progressPercentage = useMemo(() => {
-        if (!currentAzkarList.length) {
-            return 0;
-        }
+        if (!currentAzkarList.length) return 0;
 
         const totalCounts = currentAzkarList.reduce((sum, item) => sum + item.count, 0);
         const currentCounts = currentAzkarList.reduce((sum, item) => {
@@ -124,26 +142,35 @@ const AzkarApp = () => {
         fetchPrayerTimes();
     }, [fetchPrayerTimes]);
 
+    // Save logic with userSuffix
     useEffect(() => {
-        localStorage.setItem("azkar_progress", JSON.stringify({
+        if (!isLoggedIn) return;
+        localStorage.setItem(`azkar_progress${userSuffix}`, JSON.stringify({
             date: new Date().toDateString(),
             items: azkarProgress
         }));
-    }, [azkarProgress]);
+    }, [azkarProgress, userSuffix, isLoggedIn]);
 
     useEffect(() => {
-        localStorage.setItem("azkar_completed", JSON.stringify({
+        if (!isLoggedIn) return;
+        localStorage.setItem(`azkar_completed${userSuffix}`, JSON.stringify({
             date: new Date().toDateString(),
             items: completedAzkar
         }));
-    }, [completedAzkar]);
+    }, [completedAzkar, userSuffix, isLoggedIn]);
 
     useEffect(() => {
-        localStorage.setItem("azkar_prayerChecklist", JSON.stringify({
+        if (!isLoggedIn) return;
+        localStorage.setItem(`azkar_prayerChecklist${userSuffix}`, JSON.stringify({
             date: new Date().toDateString(),
             items: prayerChecklist
         }));
-    }, [prayerChecklist]);
+    }, [prayerChecklist, userSuffix, isLoggedIn]);
+
+    useEffect(() => {
+        if (!isLoggedIn) return;
+        localStorage.setItem(`azkar_streak${userSuffix}`, JSON.stringify(streak));
+    }, [streak, userSuffix, isLoggedIn]);
 
     useEffect(() => {
         localStorage.setItem("azkar_customDuas", JSON.stringify(customDuas));
@@ -167,15 +194,9 @@ const AzkarApp = () => {
     }, [language]);
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            return;
-        }
+        if (!isLoggedIn) return;
         localStorage.setItem("azkar_user", JSON.stringify(userProfile));
     }, [userProfile, isLoggedIn]);
-
-    useEffect(() => {
-        localStorage.setItem("azkar_streak", JSON.stringify(streak));
-    }, [streak]);
 
     useEffect(() => {
         const handleBeforeInstallPrompt = (event) => {
@@ -208,7 +229,7 @@ const AzkarApp = () => {
     }, [t]);
 
     useEffect(() => {
-        if (!dailyGoalsComplete) {
+        if (!dailyGoalsComplete || !isLoggedIn) {
             return;
         }
 
@@ -223,33 +244,58 @@ const AzkarApp = () => {
             const nextCount = lastDate && isYesterday(lastDate, today) ? prev.count + 1 : 1;
             return { count: nextCount, lastDate: today.toISOString() };
         });
-    }, [dailyGoalsComplete]);
+    }, [dailyGoalsComplete, isLoggedIn]);
 
     const toggleDarkMode = useCallback(() => {
         setIsDarkMode((prev) => !prev);
     }, []);
 
-    const handleLogin = useCallback((profile) => {
-        if (!profile.name.trim() && !profile.email.trim()) {
-            showToast(t.loginRequired, "warning");
-            return;
-        }
+    const handleLogin = useCallback((profile, mode) => {
+        const cleaned = { name: profile.name.trim(), email: profile.email.trim().toLowerCase() };
+        
+        // Local user registry to "simulate" accounts
+        const registry = readJson("azkar_users_registry", {});
+        const userExists = registry[cleaned.email];
 
-        const cleaned = { name: profile.name.trim(), email: profile.email.trim() };
-        setUserProfile(cleaned);
-        setIsLoggedIn(true);
-        showToast(t.loginSaved, "success");
-    }, [t]);
+        if (mode === "signin") {
+            if (!userExists) {
+                showToast(language === "en" ? "Account not found. Please create one." : "الحساب غير موجود، يرجى إنشاء حساب جديد.", "error");
+                return;
+            }
+            // If user exists, we log them in and update their name just in case
+            registry[cleaned.email] = cleaned.name;
+            localStorage.setItem("azkar_users_registry", JSON.stringify(registry));
+            setUserProfile(cleaned);
+            setIsLoggedIn(true);
+            showToast(language === "en" ? `Welcome back, ${cleaned.name}!` : `أهلاً بعودتك يا ${cleaned.name}!`, "success");
+        } else {
+            // Create account mode
+            if (userExists) {
+                showToast(language === "en" ? "Account already exists. Signing you in..." : "الحساب موجود بالفعل، جاري تسجيل دخولك...", "info");
+            } else {
+                registry[cleaned.email] = cleaned.name;
+                localStorage.setItem("azkar_users_registry", JSON.stringify(registry));
+                showToast(language === "en" ? "Account created successfully!" : "تم إنشاء الحساب بنجاح!", "success");
+            }
+            setUserProfile(cleaned);
+            setIsLoggedIn(true);
+        }
+    }, [language]);
 
     const updateProfile = useCallback((profile) => {
-        setUserProfile(profile);
+        const cleaned = { name: profile.name.trim(), email: profile.email.trim().toLowerCase() };
+        setUserProfile(cleaned);
+        const registry = readJson("azkar_users_registry", {});
+        registry[cleaned.email] = cleaned.name;
+        localStorage.setItem("azkar_users_registry", JSON.stringify(registry));
     }, []);
 
     const logout = useCallback(() => {
         setIsLoggedIn(false);
         setUserProfile({ name: "", email: "" });
         localStorage.removeItem("azkar_user");
-    }, []);
+        showToast(language === "en" ? "Logged out" : "تم تسجيل الخروج", "info");
+    }, [language]);
 
     const addCustomDua = useCallback(() => {
         if (!newDua.trim()) {

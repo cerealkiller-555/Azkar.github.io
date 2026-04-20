@@ -25,7 +25,7 @@ const LoginScreen = ({ onLogin, t, language }) => {
         setErrors({ name: nameError, email: emailError });
         
         if (!nameError && !emailError) {
-            onLogin(form);
+            onLogin(form, mode);
         }
     };
 
