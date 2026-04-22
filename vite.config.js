@@ -5,8 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  // Updated base to match the user's provided GitHub Pages URL
-  base: '/Azkar.github.io/',
+  base: '/Azkar/',
   server: {
     proxy: {
       '/api': {

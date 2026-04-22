@@ -17,6 +17,17 @@ import ZikrCard from './ZikrCard';
 const AzkarApp = () => {
     console.log('AzkarApp component initializing...');
 
+    const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+    const isLocalhost = typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    const backendAvailable = Boolean(apiBaseUrl) || isLocalhost;
+    const apiUrl = useCallback((path) => {
+        if (!path.startsWith('/')) {
+            return path;
+        }
+
+        return apiBaseUrl ? `${apiBaseUrl}${path}` : path;
+    }, [apiBaseUrl]);
+
     const [activeTab, setActiveTab] = useState(() => localStorage.getItem("azkar_activeTab") || "morning");
     const [prayerTimes, setPrayerTimes] = useState(null);
     const [location, setLocation] = useState(() => readJson("azkar_location", { city: "Cairo", country: "EG" }));
@@ -53,9 +64,9 @@ const AzkarApp = () => {
         setStreak(readJson(`azkar_streak${suffix}`, { count: 0, lastDate: null }));
         
         // 2. Fetch from backend to sync (background update)
-        if (!isOffline) {
+        if (!isOffline && backendAvailable) {
             const today = new Date().toDateString();
-            fetch(`/api/sync/${userProfile.email}/${encodeURIComponent(today)}`)
+            fetch(apiUrl(`/api/sync/${userProfile.email}/${encodeURIComponent(today)}`))
                 .then(res => res.json())
                 .then(data => {
                     if (data.error) throw new Error(data.error);
@@ -67,7 +78,7 @@ const AzkarApp = () => {
                 })
                 .catch(err => console.error("Sync fetch error:", err));
         }
-    }, [isLoggedIn, userProfile.email, isOffline]);
+    }, [isLoggedIn, userProfile.email, isOffline, backendAvailable, apiUrl]);
 
     const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("azkarDarkMode") === "true");
     const [language, setLanguage] = useState(() => localStorage.getItem("azkar_language") || "ar");
@@ -170,14 +181,14 @@ const AzkarApp = () => {
         };
         localStorage.setItem(`azkar_progress${userSuffix}`, JSON.stringify(data));
         
-        if (!isOffline) {
-            fetch('/api/sync/state', {
+        if (!isOffline && backendAvailable) {
+            fetch(apiUrl('/api/sync/state'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: userProfile.email, date: data.date, type: 'progress', data: azkarProgress })
             }).catch(console.error);
         }
-    }, [azkarProgress, userSuffix, isLoggedIn, isOffline, userProfile.email]);
+    }, [azkarProgress, userSuffix, isLoggedIn, isOffline, userProfile.email, backendAvailable, apiUrl]);
 
     useEffect(() => {
         if (!isLoggedIn) return;
@@ -187,14 +198,14 @@ const AzkarApp = () => {
         };
         localStorage.setItem(`azkar_completed${userSuffix}`, JSON.stringify(data));
         
-        if (!isOffline) {
-            fetch('/api/sync/state', {
+        if (!isOffline && backendAvailable) {
+            fetch(apiUrl('/api/sync/state'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: userProfile.email, date: data.date, type: 'completed', data: completedAzkar })
             }).catch(console.error);
         }
-    }, [completedAzkar, userSuffix, isLoggedIn, isOffline, userProfile.email]);
+    }, [completedAzkar, userSuffix, isLoggedIn, isOffline, userProfile.email, backendAvailable, apiUrl]);
 
     useEffect(() => {
         if (!isLoggedIn) return;
@@ -204,27 +215,27 @@ const AzkarApp = () => {
         };
         localStorage.setItem(`azkar_prayerChecklist${userSuffix}`, JSON.stringify(data));
         
-        if (!isOffline) {
-            fetch('/api/sync/state', {
+        if (!isOffline && backendAvailable) {
+            fetch(apiUrl('/api/sync/state'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: userProfile.email, date: data.date, type: 'checklist', data: prayerChecklist })
             }).catch(console.error);
         }
-    }, [prayerChecklist, userSuffix, isLoggedIn, isOffline, userProfile.email]);
+    }, [prayerChecklist, userSuffix, isLoggedIn, isOffline, userProfile.email, backendAvailable, apiUrl]);
 
     useEffect(() => {
         if (!isLoggedIn) return;
         localStorage.setItem(`azkar_streak${userSuffix}`, JSON.stringify(streak));
         
-        if (!isOffline) {
-            fetch('/api/sync/streak', {
+        if (!isOffline && backendAvailable) {
+            fetch(apiUrl('/api/sync/streak'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: userProfile.email, streak })
             }).catch(console.error);
         }
-    }, [streak, userSuffix, isLoggedIn, isOffline, userProfile.email]);
+    }, [streak, userSuffix, isLoggedIn, isOffline, userProfile.email, backendAvailable, apiUrl]);
 
     useEffect(() => {
         localStorage.setItem("azkar_customDuas", JSON.stringify(customDuas));
@@ -319,7 +330,7 @@ const AzkarApp = () => {
             email: profile.email.trim().toLowerCase() 
         };
         
-        if (isOffline) {
+        if (isOffline || !backendAvailable) {
             // Local-only logic when offline
             const registry = readJson("azkar_users_registry", {});
             const registeredName = registry[cleaned.email];
@@ -348,7 +359,7 @@ const AzkarApp = () => {
         }
 
         // Online Backend Auth
-        const endpoint = mode === "signin" ? '/api/auth/login' : '/api/auth/register';
+        const endpoint = mode === "signin" ? apiUrl('/api/auth/login') : apiUrl('/api/auth/register');
         const body = mode === "signin" ? { email: cleaned.email, mode: 'signin' } : { name: cleaned.name, email: cleaned.email };
 
         fetch(endpoint, {
@@ -377,7 +388,7 @@ const AzkarApp = () => {
             console.error(err);
             showToast(language === "en" ? "Server connection failed" : "فشل الاتصال بالخادم", "error");
         });
-    }, [language, isOffline]);
+    }, [language, isOffline, backendAvailable, apiUrl]);
 
     const updateProfile = useCallback((profile) => {
         const cleaned = { name: profile.name.trim(), email: profile.email.trim().toLowerCase() };
@@ -410,8 +421,8 @@ const AzkarApp = () => {
         setCustomDuas((prev) => [...prev, { id: tempId, text }]);
         setNewDua("");
         
-        if (!isOffline) {
-            fetch('/api/duas', {
+        if (!isOffline && backendAvailable) {
+            fetch(apiUrl('/api/duas'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: userProfile.email, dua_text: text })
@@ -425,17 +436,17 @@ const AzkarApp = () => {
             .catch(console.error);
         }
         showToast(t.duaAdded);
-    }, [newDua, t, isLoggedIn, isOffline, userProfile.email]);
+    }, [newDua, t, isLoggedIn, isOffline, userProfile.email, backendAvailable, apiUrl]);
 
     const deleteCustomDua = useCallback((index) => {
         const duaToDelete = customDuas[index];
         setCustomDuas((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
         
-        if (!isOffline && duaToDelete.id) {
-            fetch(`/api/duas/${duaToDelete.id}`, { method: 'DELETE' }).catch(console.error);
+        if (!isOffline && backendAvailable && duaToDelete.id) {
+            fetch(apiUrl(`/api/duas/${duaToDelete.id}`), { method: 'DELETE' }).catch(console.error);
         }
         showToast(t.duaDeleted, "info");
-    }, [customDuas, isOffline, t]);
+    }, [customDuas, isOffline, t, backendAvailable, apiUrl]);
 
     // Auto-advance: scroll to the next incomplete zikr after finishing one
     const scrollToNextZikr = useCallback((currentId, list, type) => {

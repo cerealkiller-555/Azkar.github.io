@@ -41,8 +41,8 @@ const ProgressHero = ({ activeTab, progressPercentage, completedCount, totalCoun
         gradient: "from-[#D4A76A] to-[#B18F67]",
         icon: Sun,
         label: t.progressTitleMorning,
-        accent: "bg-white/20",
-        textColor: "text-white"
+        accent: "bg-black/10",
+        textColor: "text-slate-900"
     };
 
     const Icon = themeConfig.icon;
@@ -50,6 +50,9 @@ const ProgressHero = ({ activeTab, progressPercentage, completedCount, totalCoun
     const subTextColor = textColor === "text-white" ? "text-white/80" : "text-slate-700/90";
     const barBg = textColor === "text-white" ? "bg-black/20" : "bg-black/10";
     const barFill = textColor === "text-white" ? "from-white/60 to-white" : "from-[#423E87]/60 to-[#423E87]";
+    const actionButtonClass = textColor === "text-white"
+        ? "bg-white/10 border-white/20 text-white/80 hover:text-white hover:bg-white/20"
+        : "bg-black/5 border-black/10 text-slate-700 hover:text-slate-900 hover:bg-black/10";
 
     const greeting = userProfile?.name
         ? (language === "en" ? `Welcome, ${userProfile.name}` : `أهلاً بك، ${userProfile.name}`)
@@ -89,7 +92,7 @@ const ProgressHero = ({ activeTab, progressPercentage, completedCount, totalCoun
                         {progressPercentage > 0 && (
                             <button
                                 onClick={resetAllProgress}
-                                className="group p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white/80 hover:text-white hover:bg-white/20 transition-all active:scale-90"
+                                className={`group p-4 rounded-2xl backdrop-blur-md transition-all active:scale-90 ${actionButtonClass}`}
                                 title={t.resetProgress}
                             >
                                 <RotateCcw className="w-6 h-6 group-hover:rotate-[-45deg] transition-transform duration-300" />
