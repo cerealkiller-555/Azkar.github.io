@@ -47,8 +47,8 @@ const ZikrCard = ({
                     : ""
             } ${
                 isCompleted
-                    ? "bg-gradient-to-br from-[#D4A76A]/10 to-[#10b981]/5 border-[#10b981]/40 shadow-inner"
-                    : "bg-white dark:bg-slate-800/80 border-slate-100/50 dark:border-slate-700/50 glass-card shadow-sm hover:shadow-xl hover:translate-y-[-4px]"
+                    ? "bg-gradient-to-br from-[#fff8eb] to-[#ecfdf5] dark:from-[#1f2937] dark:to-[#064e3b]/20 border-[#10b981]/40 shadow-inner"
+                    : "bg-white/95 dark:bg-slate-800/90 border-slate-200/70 dark:border-slate-700/50 glass-card shadow-sm hover:shadow-xl hover:translate-y-[-4px]"
             } mb-6`}
             style={{ animationDelay: `${index * 80}ms` }}
         >
@@ -71,7 +71,7 @@ const ZikrCard = ({
                             {isCompleted ? <CheckCircle className="w-6 h-6 animate-pulse" /> : index + 1}
                         </div>
                         {title && (
-                            <h3 className="text-xl font-black text-[#423E87] dark:text-[#D4A76A] tracking-tight">{title}</h3>
+                            <h3 className="text-xl font-black text-slate-900 dark:text-[#D4A76A] tracking-tight">{title}</h3>
                         )}
                     </div>
 
@@ -107,8 +107,8 @@ const ZikrCard = ({
                 <div className="relative mb-8">
                     <p className={`font-amiri text-2xl md:text-5xl leading-[1.8] text-center transition-all duration-700 ${
                         isCompleted 
-                            ? "text-[#10b981] dark:text-[#34d399] opacity-90 scale-95" 
-                            : "text-[#0f172a] dark:text-[#f8fafc]"
+                            ? "text-emerald-800 dark:text-emerald-300 opacity-95 scale-95"
+                            : "text-slate-950 dark:text-slate-50"
                     }`}>
                         {zikr.text}
                     </p>
