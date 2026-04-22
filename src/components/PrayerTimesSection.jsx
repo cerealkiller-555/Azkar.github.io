@@ -16,12 +16,60 @@ const formatTime12Hour = (timeStr, language) => {
 
 const PrayerTimesSection = ({ prayerTimes, location, t, language }) => {
     const prayerCards = [
-        { name: language === "en" ? "Fajr" : "الفجر", key: "Fajr", icon: "🌅", color: "from-[#423E87] to-[#2E2A5E]" },
-        { name: language === "en" ? "Sunrise" : "الشروق", key: "Sunrise", icon: "☀️", color: "from-[#D4A76A] to-[#B18F67]" },
-        { name: language === "en" ? "Dhuhr" : "الظهر", key: "Dhuhr", icon: "🌞", color: "from-[#EAA023] to-[#D4A76A]" },
-        { name: language === "en" ? "Asr" : "العصر", key: "Asr", icon: "🌤️", color: "from-[#B18F67] to-[#8C6F54]" },
-        { name: language === "en" ? "Maghrib" : "المغرب", key: "Maghrib", icon: "🌆", color: "from-[#CC6243] to-[#8C4B39]" },
-        { name: language === "en" ? "Isha" : "العشاء", key: "Isha", icon: "🌙", color: "from-[#1a1a2e] to-[#423E87]" }
+        {
+            name: language === "en" ? "Fajr" : "الفجر",
+            key: "Fajr",
+            icon: "🌅",
+            color: "from-[#423E87] to-[#2E2A5E]",
+            textColor: "text-white",
+            mutedTextColor: "text-white/80",
+            dotColor: "bg-white/60"
+        },
+        {
+            name: language === "en" ? "Sunrise" : "الشروق",
+            key: "Sunrise",
+            icon: "☀️",
+            color: "from-[#D4A76A] to-[#B18F67]",
+            textColor: "text-slate-900",
+            mutedTextColor: "text-slate-800/75",
+            dotColor: "bg-slate-900/30"
+        },
+        {
+            name: language === "en" ? "Dhuhr" : "الظهر",
+            key: "Dhuhr",
+            icon: "🌞",
+            color: "from-[#EAA023] to-[#D4A76A]",
+            textColor: "text-slate-900",
+            mutedTextColor: "text-slate-800/75",
+            dotColor: "bg-slate-900/30"
+        },
+        {
+            name: language === "en" ? "Asr" : "العصر",
+            key: "Asr",
+            icon: "🌤️",
+            color: "from-[#B18F67] to-[#8C6F54]",
+            textColor: "text-slate-900",
+            mutedTextColor: "text-slate-800/75",
+            dotColor: "bg-slate-900/30"
+        },
+        {
+            name: language === "en" ? "Maghrib" : "المغرب",
+            key: "Maghrib",
+            icon: "🌆",
+            color: "from-[#CC6243] to-[#8C4B39]",
+            textColor: "text-white",
+            mutedTextColor: "text-white/80",
+            dotColor: "bg-white/60"
+        },
+        {
+            name: language === "en" ? "Isha" : "العشاء",
+            key: "Isha",
+            icon: "🌙",
+            color: "from-[#1a1a2e] to-[#423E87]",
+            textColor: "text-white",
+            mutedTextColor: "text-white/80",
+            dotColor: "bg-white/60"
+        }
     ];
 
     return (
@@ -40,12 +88,12 @@ const PrayerTimesSection = ({ prayerTimes, location, t, language }) => {
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {prayerTimes ? prayerCards.map((prayer) => (
-                    <div key={prayer.key} className={`bg-gradient-to-br ${prayer.color} p-5 md:p-6 rounded-2xl text-white shadow-lg hover:scale-[1.03] transition-all group cursor-default`}>
+                    <div key={prayer.key} className={`bg-gradient-to-br ${prayer.color} ${prayer.textColor} p-5 md:p-6 rounded-2xl shadow-lg hover:scale-[1.03] transition-all group cursor-default`}>
                         <div className="flex items-center justify-between mb-4">
                             <span className="text-2xl md:text-3xl group-hover:scale-110 transition-transform duration-500 block">{prayer.icon}</span>
-                            <div className="w-2 h-2 rounded-full bg-white/60 animate-pulse" />
+                            <div className={`w-2 h-2 rounded-full animate-pulse ${prayer.dotColor}`} />
                         </div>
-                        <h3 className="text-sm md:text-base font-bold opacity-80 mb-1">{prayer.name}</h3>
+                        <h3 className={`text-sm md:text-base font-bold mb-1 ${prayer.mutedTextColor}`}>{prayer.name}</h3>
                         <p className="text-2xl md:text-3xl font-black tracking-widest" dir="ltr">{formatTime12Hour(prayerTimes[prayer.key], language)}</p>
                     </div>
                 )) : (
