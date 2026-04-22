@@ -24,11 +24,16 @@ if (rootElement) {
 }
 
 // Register service worker for PWA support
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    const swUrl = `${import.meta.env.BASE_URL}sw.js`;
-    navigator.serviceWorker.register(swUrl)
-      .then((reg) => console.log('Service Worker registered:', reg.scope))
-      .catch((err) => console.log('Service Worker registration failed:', err));
+if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
+  window.addEventListener('load', async () => {
+    if ('serviceWorker' in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+    }
+
+    if ('caches' in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName)));
+    }
   });
 }
