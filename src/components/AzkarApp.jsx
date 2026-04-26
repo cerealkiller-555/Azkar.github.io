@@ -66,7 +66,6 @@ const AzkarApp = () => {
     const completedAzkarRef = useRef(completedAzkar);
 
     // Initial log
-    console.log('AzkarApp component initializing...');
 
     // Load user-specific data when login changes
     useEffect(() => {
