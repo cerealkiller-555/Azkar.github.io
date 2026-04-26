@@ -15,27 +15,26 @@ import LoginScreen from './LoginScreen';
 import ZikrCard from './ZikrCard';
 
 const AzkarApp = () => {
-    console.log('AzkarApp component initializing...');
-
+    // Utility and Base state
     const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
     const isLocalhost = typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname);
     const backendAvailable = Boolean(apiBaseUrl) || isLocalhost;
+    
+    const [isOffline, setIsOffline] = useState(!navigator.onLine);
+    const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("azkarDarkMode") === "true");
+    const [language, setLanguage] = useState(() => localStorage.getItem("azkar_language") || "ar");
+    const [activeTab, setActiveTab] = useState(() => localStorage.getItem("azkar_activeTab") || "morning");
+
     const apiUrl = useCallback((path) => {
         if (!path.startsWith('/')) {
             return path;
         }
-
         return apiBaseUrl ? `${apiBaseUrl}${path}` : path;
     }, [apiBaseUrl]);
 
-    const [activeTab, setActiveTab] = useState(() => localStorage.getItem("azkar_activeTab") || "morning");
-    const [prayerTimes, setPrayerTimes] = useState(null);
-    const [location, setLocation] = useState(() => readJson("azkar_location", { city: "Cairo", country: "EG" }));
-    const [customDuas, setCustomDuas] = useState(() => readJson("azkar_customDuas", defaultCustomDuas).map(d => typeof d === 'string' ? { id: Date.now() + Math.random(), text: d } : d));
-    const [newDua, setNewDua] = useState("");
-    const [currentTime, setCurrentTime] = useState(new Date());
+    const t = useMemo(() => I18N[language] || I18N.ar, [language]);
     
-    // Initial login state
+    // User & Profile setup
     const [userProfile, setUserProfile] = useState(() => readJson("azkar_user", { name: "", email: "" }));
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         const saved = readJson("azkar_user", null);
@@ -44,11 +43,30 @@ const AzkarApp = () => {
 
     const userSuffix = useMemo(() => (isLoggedIn && userProfile.email ? `_${userProfile.email}` : ""), [isLoggedIn, userProfile.email]);
 
-    // Data states - they will be re-initialized in an effect after login
+    // Prayer & Location
+    const [prayerTimes, setPrayerTimes] = useState(null);
+    const [location, setLocation] = useState(() => readJson("azkar_location", { city: "Cairo", country: "EG" }));
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    // Progress and Content
     const [completedAzkar, setCompletedAzkar] = useState({});
     const [azkarProgress, setAzkarProgress] = useState({});
     const [prayerChecklist, setPrayerChecklist] = useState({});
     const [streak, setStreak] = useState({ count: 0, lastDate: null });
+    const [customDuas, setCustomDuas] = useState(() => readJson("azkar_customDuas", defaultCustomDuas).map(d => typeof d === 'string' ? { id: Date.now() + Math.random(), text: d } : d));
+    const [newDua, setNewDua] = useState("");
+    
+    // UI Interaction states
+    const [expandedBenefits, setExpandedBenefits] = useState({});
+    const [countAnimation, setCountAnimation] = useState(null);
+    const [deferredPrompt, setDeferredPrompt] = useState(null);
+    const [highlightedZikr, setHighlightedZikr] = useState(null);
+    const mainRef = useRef(null);
+    const toastShownRef = useRef(new Set());
+    const completedAzkarRef = useRef(completedAzkar);
+
+    // Initial log
+    console.log('AzkarApp component initializing...');
 
     // Load user-specific data when login changes
     useEffect(() => {
@@ -80,23 +98,10 @@ const AzkarApp = () => {
         }
     }, [isLoggedIn, userProfile.email, isOffline, backendAvailable, apiUrl]);
 
-    const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("azkarDarkMode") === "true");
-    const [language, setLanguage] = useState(() => localStorage.getItem("azkar_language") || "ar");
-    
-    const [expandedBenefits, setExpandedBenefits] = useState({});
-    const [countAnimation, setCountAnimation] = useState(null);
-    const [isOffline, setIsOffline] = useState(!navigator.onLine);
-    const [deferredPrompt, setDeferredPrompt] = useState(null);
-    const [highlightedZikr, setHighlightedZikr] = useState(null);
-    const mainRef = useRef(null);
-    const toastShownRef = useRef(new Set());
-    // Use a ref to always have the latest completedAzkar for auto-advance logic
-    const completedAzkarRef = useRef(completedAzkar);
     useEffect(() => {
         completedAzkarRef.current = completedAzkar;
     }, [completedAzkar]);
 
-    const t = useMemo(() => I18N[language] || I18N.ar, [language]);
 
     // ... currentAzkarList, progressPercentage, completedCount, formatTime ...
     const currentAzkarList = useMemo(() => {
