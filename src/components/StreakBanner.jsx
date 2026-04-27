@@ -1,42 +1,47 @@
 import React from 'react';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Zap } from 'lucide-react';
 
 const StreakBanner = ({ streakCount, goals, t }) => {
     return (
-        <div className="mb-8 p-6 md:p-7 rounded-3xl bg-white dark:bg-slate-800/90 border border-slate-100 dark:border-slate-700/50 shadow-lg">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white mb-1">{t.streakTitle}</h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">{t.streakSubtitle}</p>
+        <div className="glass-panel p-8 space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="space-y-1">
+                    <h3 className="text-2xl font-black text-text-primary tracking-tight">{t.streakTitle}</h3>
+                    <p className="text-sm text-text-secondary font-medium">{t.streakSubtitle}</p>
                 </div>
-                <div className="flex items-center gap-3 bg-[#D4A76A]/10 dark:bg-[#D4A76A]/20 px-4 py-2 rounded-2xl border border-[#D4A76A]/20 dark:border-[#D4A76A]/30">
-                    <span className="text-2xl font-black text-[#D4A76A] dark:text-[#D4A76A]">{streakCount}</span>
-                    <span className="text-xs font-bold text-[#B18F67]">{t.streakDays}</span>
+                <div className="flex items-center gap-4 bg-accent/10 dark:bg-accent/20 px-6 py-4 rounded-3xl border-2 border-accent/20 group hover:border-accent transition-all">
+                    <Zap className="w-8 h-8 text-accent fill-accent/30 group-hover:scale-110 transition-transform" />
+                    <div className="flex flex-col">
+                        <span className="text-3xl font-black text-accent leading-none">{streakCount}</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-accent-dark opacity-80">{t.streakDays}</span>
+                    </div>
                 </div>
             </div>
 
-            <div className="mt-5">
-                <p className="text-xs font-bold text-slate-600 dark:text-slate-400 mb-3 uppercase tracking-widest">{t.goalsTitle}</p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {goals.map((goal) => (
-                        <div
-                            key={goal.id}
-                            className={`p-3 rounded-2xl border flex items-center gap-3 text-sm font-bold transition-all ${
-                                goal.completed
-                                    ? "bg-[#D4A76A]/10 dark:bg-[#D4A76A]/20 border-[#D4A76A]/30 dark:border-[#D4A76A]/40 text-[#423E87] dark:text-[#D4A76A]"
-                                    : "bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400"
-                            }`}
-                        >
-                            <span className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                                goal.completed ? "bg-[#D4A76A] text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-400"
-                            }`}>
-                                <CheckCircle className="w-4 h-4" />
-                            </span>
-                            <span>{goal.label}</span>
-                        </div>
-                    ))}
+            {goals && goals.length > 0 && (
+                <div className="pt-4 border-t border-glass-border">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-tertiary mb-4">{t.goalsTitle}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {goals.map((goal) => (
+                            <div
+                                key={goal.id}
+                                className={`p-4 rounded-2xl border-2 flex items-center gap-3 text-sm font-black transition-all ${
+                                    goal.completed
+                                        ? "bg-primary text-accent border-primary shadow-lg shadow-primary/10"
+                                        : "bg-bg-subtle dark:bg-slate-900/50 border-glass-border text-text-tertiary"
+                                }`}
+                            >
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                                    goal.completed ? "bg-accent/20 text-accent" : "bg-slate-200 dark:bg-slate-800 text-slate-400"
+                                }`}>
+                                    <CheckCircle className="w-5 h-5" />
+                                </div>
+                                <span className="truncate">{goal.label}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
