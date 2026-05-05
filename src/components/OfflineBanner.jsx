@@ -2,9 +2,7 @@ import React from 'react';
 import { WifiOff } from 'lucide-react';
 
 const OfflineBanner = ({ offline, t }) => {
-    if (!offline) {
-        return null;
-    }
+    if (!offline) return null;
 
     return (
         <div className="offline-banner">

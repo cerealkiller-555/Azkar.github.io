@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { Clock, Moon, Sun, MapPin, BookOpen, Plus, Settings, CheckCircle, Share2, Trash2, Heart, Info, ArrowUp, ChevronDown, Wifi, WifiOff, Download, RotateCcw } from 'lucide-react';
-import { ICONS, DAILY_TAB_IDS, OFFLINE_PRAYER_TIMES, PRAYER_CHECKLIST, I18N, azkar, defaultCustomDuas, tabConfig } from '../utils/constants';
-import { showToast, readJson, readDailyState, dateKey, isSameDay, isYesterday, subscribeToToasts, toastQueue } from '../utils/helpers';
+import React from 'react';
+import { Plus, Heart, Trash2 } from 'lucide-react';
 
 const CustomDuasSection = ({ customDuas, newDua, setNewDua, addCustomDua, deleteCustomDua, t }) => (
     <div className="animate-slide-up space-y-6">
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-[#CC6243] translate-z-0 to-[#B45FA0] text-white shadow-xl">
+        <div className="p-6 rounded-2xl bg-gradient-to-br from-[#CC6243] to-[#B45FA0] text-white shadow-xl">
             <h2 className="text-2xl font-black mb-1 flex items-center gap-3">
                 <Heart className="w-7 h-7 text-white/70" />
                 {t.customTitle}
@@ -17,28 +15,26 @@ const CustomDuasSection = ({ customDuas, newDua, setNewDua, addCustomDua, delete
             <input
                 type="text"
                 value={newDua}
-                onChange={(event) => setNewDua(event.target.value)}
-                onKeyDown={(event) => event.key === "Enter" && addCustomDua()}
+                onChange={(e) => setNewDua(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && addCustomDua()}
                 placeholder={t.customPlaceholder}
                 className="flex-1 px-5 py-3 bg-transparent text-slate-800 dark:text-white text-base focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                id="custom-dua-input"
             />
             <button
                 onClick={addCustomDua}
                 className="px-6 py-3 bg-[#CC6243] text-white font-black text-sm rounded-xl hover:bg-[#B45FA0] shadow-md transition-all active:scale-95"
-                id="add-dua-btn"
                 aria-label={t.addDua}
             >
                 <Plus className="w-5 h-5" />
             </button>
         </div>
 
-        <div className="space-y-3 stagger-children">
+        <div className="space-y-3">
             {!customDuas.length && (
                 <div className="py-12 text-center">
                     <Heart className="w-12 h-12 text-slate-200 dark:text-slate-700 mx-auto mb-4" />
                     <p className="text-slate-600 dark:text-slate-400 font-bold">{t.noDuas}</p>
-                    <p className="text-sm text-slate-500 dark:text-slate-500">{t.noDuasHint}</p>
+                    <p className="text-sm text-slate-500">{t.noDuasHint}</p>
                 </div>
             )}
 

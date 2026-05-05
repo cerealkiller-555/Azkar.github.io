@@ -19,28 +19,35 @@ const ZikrCard = ({
     onProgress
 }) => {
     const buttonRef = useRef(null);
-    const cardRef = useRef(null);
     const [showCelebration, setShowCelebration] = useState(false);
 
     const isEn = language === "en";
-    const title = isEn && zikr.titleEn ? zikr.titleEn : zikr.title;
-    const benefit = isEn && zikr.benefitEn ? zikr.benefitEn : zikr.benefit;
-    const meaning = isEn && zikr.meaningEn ? zikr.meaningEn : zikr.meaning;
-    const source = isEn && zikr.sourceEn ? zikr.sourceEn : zikr.source;
+    const title   = isEn && zikr.titleEn   ? zikr.titleEn   : zikr.title;
+    const benefit = isEn && zikr.benefitEn  ? zikr.benefitEn  : zikr.benefit;
+    const meaning = isEn && zikr.meaningEn  ? zikr.meaningEn  : zikr.meaning;
+    const source  = isEn && zikr.sourceEn   ? zikr.sourceEn   : zikr.source;
 
-    // Celebration animation when completed
+    // Celebration flash when completed via counter (not toggle)
     useEffect(() => {
-        if (isCompleted && progress >= zikr.count && !showCelebration) {
+        if (isCompleted && progress >= zikr.count) {
             setShowCelebration(true);
             const timer = setTimeout(() => setShowCelebration(false), 2000);
             return () => clearTimeout(timer);
         }
-    }, [isCompleted, progress, zikr.count]);
+    }, [isCompleted]); // only trigger on completion state change
+
+    const handleShare = () => {
+        const shareText = `${title ? `${title}\n` : ""}${zikr.text}\n\nSent from ${t.appName}`;
+        if (navigator.share) {
+            navigator.share({ title: t.appName, text: shareText }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(shareText).then(() => showToast(t.shareCopy));
+        }
+    };
 
     return (
         <div
             id={`zikr-${uniqueId}`}
-            ref={cardRef}
             className={`zikr-card animate-slide-up ${isCompleted ? 'completed border-emerald-500/30' : 'glass-card'} ${isHighlighted ? 'is-highlighted' : ''}`}
             style={{ animationDelay: `${index * 50}ms` }}
         >
@@ -52,7 +59,7 @@ const ZikrCard = ({
             )}
 
             <div className="flex flex-col gap-6">
-                {/* Header row */}
+                {/* Header */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black transition-all duration-500 ${
@@ -69,16 +76,9 @@ const ZikrCard = ({
 
                     <div className="flex items-center gap-2">
                         <button
-                            onClick={() => {
-                                const shareText = `${title ? `${title}\n` : ""}${zikr.text}\n\nSent from ${t.appName}`;
-                                if (navigator.share) {
-                                    navigator.share({ title: t.appName, text: shareText });
-                                } else {
-                                    navigator.clipboard.writeText(shareText);
-                                    showToast(t.shareCopy);
-                                }
-                            }}
+                            onClick={handleShare}
                             className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 text-slate-400 hover:text-[#D4A76A] transition-all hover:bg-[#D4A76A]/10 active:scale-95"
+                            aria-label={t.shareLabel}
                         >
                             <Share2 className="w-5 h-5" />
                         </button>
@@ -89,16 +89,17 @@ const ZikrCard = ({
                                     ? "bg-[#10B981] text-white shadow-lg shadow-emerald-500/30"
                                     : "bg-slate-50 dark:bg-slate-800/50 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
                             }`}
+                            aria-label={t.markComplete}
                         >
                             <CheckCircle className="w-5 h-5" />
                         </button>
                     </div>
                 </div>
 
-                {/* Arabic text - Maximum Readability */}
+                {/* Arabic text */}
                 <div className="relative py-2">
                     <p className={`text-arabic font-amiri text-3xl md:text-5xl leading-[1.8] transition-all duration-700 ${
-                        isCompleted 
+                        isCompleted
                             ? "text-slate-400 dark:text-slate-500 opacity-60 scale-95"
                             : "text-premium dark:text-white"
                     }`}>
@@ -106,11 +107,11 @@ const ZikrCard = ({
                     </p>
                 </div>
 
-                {/* Interaction - Counter Area */}
+                {/* Counter button */}
                 <div className="flex flex-col gap-6">
                     <button
                         ref={buttonRef}
-                        onClick={(event) => onProgress(event, buttonRef)}
+                        onClick={(e) => onProgress(e, buttonRef)}
                         disabled={isCompleted}
                         className={`counter-btn relative group h-20 rounded-[28px] overflow-hidden shadow-xl transition-all active:scale-[0.97] ${
                             isCompleted
@@ -118,11 +119,11 @@ const ZikrCard = ({
                                 : "bg-gradient-to-r from-[#423E87] to-[#2E2A5E] hover:shadow-2xl hover:shadow-[#423E87]/20"
                         }`}
                     >
-                        {/* Progress Fill */}
+                        {/* Progress fill */}
                         {!isCompleted && (
-                            <div 
-                                className="progress-fill z-0" 
-                                style={{ width: `${progressPct}%`, background: 'rgba(212, 167, 106, 0.4)' }} 
+                            <div
+                                className="progress-fill z-0"
+                                style={{ width: `${progressPct}%`, background: 'rgba(212, 167, 106, 0.4)' }}
                             />
                         )}
 
@@ -147,7 +148,7 @@ const ZikrCard = ({
                         </div>
                     </button>
 
-                    {/* Metadata Toggle */}
+                    {/* Metadata toggle (benefit / source / meaning) */}
                     {(benefit || source || meaning) && (
                         <div className="pt-2">
                             <button
@@ -191,4 +192,4 @@ const ZikrCard = ({
     );
 };
 
-export default ZikrCard;
+export default React.memo(ZikrCard);

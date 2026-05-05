@@ -1,23 +1,35 @@
 import { Clock, Moon, Sun, BookOpen, Heart, Settings } from 'lucide-react';
 import AZKAR_DATA from '../data/azkar-data.js';
 
-export const ICONS = { Clock, Moon, Sun, BookOpen, Heart, Settings };
-
+// ═══════════════════════════════════════════
+// Re-export azkar data
+// ═══════════════════════════════════════════
 export const { azkar, defaultCustomDuas, tabs: tabConfig } = AZKAR_DATA;
 
-console.log('Constants loaded:', { azkar: !!azkar, defaultCustomDuas: !!defaultCustomDuas, tabConfig: !!tabConfig });
+// Icon map — used by AzkarApp to resolve tab icons from string keys
+export const ICONS = { Clock, Moon, Sun, BookOpen, Heart, Settings };
+
+// Tabs that show daily progress (azkar lists)
 export const DAILY_TAB_IDS = ["morning", "evening", "sleeping", "prayer_azkar"];
+
+// Fallback prayer times when offline
 export const OFFLINE_PRAYER_TIMES = {
-    Fajr: "04:45", Sunrise: "06:15", Dhuhr: "11:50", Asr: "15:10", Maghrib: "17:30", Isha: "19:00"
+    Fajr: "04:45", Sunrise: "06:15", Dhuhr: "11:50",
+    Asr: "15:10", Maghrib: "17:30", Isha: "19:00"
 };
+
+// Prayer checklist items
 export const PRAYER_CHECKLIST = [
-    { id: "fajr", ar: "الفجر", en: "Fajr" },
-    { id: "dhuhr", ar: "الظهر", en: "Dhuhr" },
-    { id: "asr", ar: "العصر", en: "Asr" },
-    { id: "maghrib", ar: "المغرب", en: "Maghrib" },
-    { id: "isha", ar: "العشاء", en: "Isha" }
+    { id: "fajr",    ar: "الفجر",   en: "Fajr" },
+    { id: "dhuhr",   ar: "الظهر",   en: "Dhuhr" },
+    { id: "asr",     ar: "العصر",   en: "Asr" },
+    { id: "maghrib", ar: "المغرب",  en: "Maghrib" },
+    { id: "isha",    ar: "العشاء",  en: "Isha" }
 ];
 
+// ═══════════════════════════════════════════
+// Internationalization
+// ═══════════════════════════════════════════
 export const I18N = {
     ar: {
         appName: "حصنك",
@@ -100,7 +112,8 @@ export const I18N = {
         resetAllToast: "تم إعادة تعيين جميع الأذكار",
         progressResetOne: "تم إعادة تعيين العداد",
         progressCompleted: "تم إتمام الذكر ✓",
-        meaningTitle: "شرح ومعاني الكلمات"
+        meaningTitle: "شرح ومعاني الكلمات",
+        allComplete: "🎉 تم إتمام القسم!"
     },
     en: {
         appName: "Hesnok",
@@ -126,7 +139,7 @@ export const I18N = {
         progressLabel: "Progress",
         streakSubtitle: "Keep up your daily azkar and prayers",
         streakDays: "days",
-        goalsTitle: "Today’s goals",
+        goalsTitle: "Today's goals",
         goalMorning: "Morning azkar",
         goalEvening: "Evening azkar",
         goalPrayers: "Five prayers",
@@ -183,6 +196,7 @@ export const I18N = {
         resetAllToast: "All azkar reset",
         progressResetOne: "Counter reset",
         progressCompleted: "Marked complete",
-        meaningTitle: "Meaning and Explanation"
+        meaningTitle: "Meaning and Explanation",
+        allComplete: "🎉 Category Complete!"
     }
 };

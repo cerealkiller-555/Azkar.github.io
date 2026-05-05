@@ -3,11 +3,9 @@ import { PRAYER_CHECKLIST } from '../utils/constants';
 
 const PrayerChecklist = ({ checklist, onToggle, language, t }) => (
     <div className="mt-8 p-6 rounded-2xl bg-white dark:bg-slate-800/90 border border-slate-100 dark:border-slate-700/50 shadow-lg">
-        <div className="flex items-center justify-between mb-4">
-            <div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white">{t.prayerChecklistTitle}</h3>
-                <p className="text-sm text-slate-600 dark:text-slate-500 font-medium">{t.prayerChecklistNote}</p>
-            </div>
+        <div className="mb-4">
+            <h3 className="text-xl font-black text-slate-900 dark:text-white">{t.prayerChecklistTitle}</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-500 font-medium">{t.prayerChecklistNote}</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {PRAYER_CHECKLIST.map((prayer) => {

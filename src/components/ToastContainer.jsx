@@ -5,20 +5,19 @@ const ToastContainer = () => {
     const [toasts, setToasts] = useState([]);
 
     useEffect(() => {
-        subscribeToToasts(setToasts);
-        return () => {
-            subscribeToToasts(null);
-        };
+        const unsub = subscribeToToasts(setToasts);
+        return unsub;
     }, []);
 
-    if (!toasts.length) {
-        return null;
-    }
+    if (!toasts.length) return null;
 
     return (
         <div className="toast-container">
             {toasts.map((toast) => (
-                <div key={toast.id} className={`toast toast-${toast.type} ${toast.exiting ? "toast-exit" : ""}`}>
+                <div
+                    key={toast.id}
+                    className={`toast toast-${toast.type} ${toast.exiting ? "toast-exit" : ""}`}
+                >
                     {toast.type === "success" && "✓ "}
                     {toast.type === "info" && "ℹ "}
                     {toast.type === "warning" && "⚠ "}
