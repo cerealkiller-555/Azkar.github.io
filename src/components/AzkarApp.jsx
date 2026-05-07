@@ -472,7 +472,7 @@ const AzkarApp = () => {
                 <div className="container mx-auto px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleTabChange("morning")}>
                         <div className="w-10 h-10 rounded-lg bg-white dark:bg-[var(--bg-subtle)] flex items-center justify-center shadow-sm border border-[var(--glass-border)] transition-transform">
-                            <img src="hesnok_logo.png" alt="Hesnok" className="w-8 h-8 rounded-md" />
+                            <img src="hesnok_logo_v2_1778189277312.png" alt="Hesnok" className="w-10 h-10 rounded-lg shadow-lg" />
                         </div>
                         <div>
                             <h1 className="text-lg font-black text-[var(--text-primary)] leading-none">{t.appName}</h1>

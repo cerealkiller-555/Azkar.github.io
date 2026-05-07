@@ -5,13 +5,13 @@
    DESIGN TOKENS
    ═══════════════════════════════════════════ */
 :root {
-    --primary: #0D9488;
-    --primary-light: #14B8A6;
-    --primary-dark: #0F766E;
-    --accent: #D97706;
-    --accent-light: #F59E0B;
-    --accent-dark: #B45309;
-    --accent-glow: rgba(13, 148, 136, 0.25);
+    --primary: #6366f1; /* Indigo */
+    --primary-light: #818cf8;
+    --primary-dark: #4f46e5;
+    --accent: #f59e0b; /* Amber/Gold */
+    --accent-light: #fbbf24;
+    --accent-dark: #d97706;
+    --accent-glow: rgba(99, 102, 241, 0.25);
 
     --success: #10B981;
     --warning: #F59E0B;
@@ -47,11 +47,11 @@
     --text-secondary: #CBD5E1;
     --text-tertiary: #94A3B8;
 
-    --primary: #14B8A6;
-    --primary-light: #2DD4BF;
-    --primary-dark: #0D9488;
-    --accent: #FBBF24;
-    --accent-dark: #F59E0B;
+    --primary: #818cf8;
+    --primary-light: #a5b4fc;
+    --primary-dark: #6366f1;
+    --accent: #fbbf24;
+    --accent-dark: #f59e0b;
     --glass-bg: rgba(15, 23, 42, 0.45);
     --glass-border: rgba(255, 255, 255, 0.08);
     --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
