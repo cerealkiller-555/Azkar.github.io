@@ -5,31 +5,31 @@
    DESIGN TOKENS
    ═══════════════════════════════════════════ */
 :root {
-    --primary: #146C5A;
-    --primary-light: #1F8A73;
-    --primary-dark: #0D4F43;
-    --accent: #B8751A;
-    --accent-light: #D99D3A;
-    --accent-dark: #835314;
-    --accent-glow: rgba(20, 108, 90, 0.2);
+    --primary: #0D9488;
+    --primary-light: #14B8A6;
+    --primary-dark: #0F766E;
+    --accent: #D97706;
+    --accent-light: #F59E0B;
+    --accent-dark: #B45309;
+    --accent-glow: rgba(13, 148, 136, 0.25);
 
     --success: #10B981;
     --warning: #F59E0B;
     --error: #EF4444;
 
     /* Backgrounds */
-    --bg-main: #F6F7F4;
-    --bg-surface: #FFFFFF;
-    --bg-subtle: #EEF2EE;
+    --bg-main: #F8FAFC;
+    --bg-surface: rgba(255, 255, 255, 0.65);
+    --bg-subtle: #F1F5F9;
 
-    --text-primary: #17211E;
-    --text-secondary: #4B5A55;
-    --text-tertiary: #6D7D77;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-tertiary: #64748B;
     --text-on-primary: #FFFFFF;
 
-    --glass-bg: rgba(255, 255, 255, 0.94);
-    --glass-border: rgba(23, 33, 30, 0.1);
-    --glass-shadow: 0 6px 18px rgba(23, 33, 30, 0.06);
+    --glass-bg: rgba(255, 255, 255, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
 
     /* Motion */
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -39,22 +39,23 @@
 }
 
 .dark {
-    --bg-main: #101714;
-    --bg-surface: #18221E;
-    --bg-subtle: #202C27;
+    --bg-main: #020617;
+    --bg-surface: rgba(15, 23, 42, 0.6);
+    --bg-subtle: #0F172A;
 
-    --text-primary: #F4F7F3;
-    --text-secondary: #CBD6D0;
-    --text-tertiary: #A8B6AF;
+    --text-primary: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-tertiary: #94A3B8;
 
-    --primary: #63C3A5;
-    --primary-light: #7AD5B9;
-    --primary-dark: #2E806C;
-    --accent: #E0B15F;
-    --accent-dark: #F0C774;
-    --glass-bg: rgba(24, 34, 30, 0.94);
-    --glass-border: rgba(244, 247, 243, 0.12);
-    --glass-shadow: 0 6px 18px rgba(0, 0, 0, 0.26);
+    --primary: #14B8A6;
+    --primary-light: #2DD4BF;
+    --primary-dark: #0D9488;
+    --accent: #FBBF24;
+    --accent-dark: #F59E0B;
+    --glass-bg: rgba(15, 23, 42, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --accent-glow: rgba(20, 184, 166, 0.25);
 }
 
 /* ═══════════════════════════════════════════
@@ -90,33 +91,97 @@ html, body {
 /* ═══════════════════════════════════════════
    PATTERN BACKGROUND
    ═══════════════════════════════════════════ */
+/* Morning Theme */
+.theme-morning.pattern-bg {
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(13, 148, 136, 0.1), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(217, 119, 6, 0.08), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(56, 189, 248, 0.1), transparent 50%);
+}
+.theme-morning.dark.pattern-bg {
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(20, 184, 166, 0.12), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(251, 191, 36, 0.1), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(56, 189, 248, 0.1), transparent 50%);
+}
+
+/* Noon Theme */
+.theme-noon.pattern-bg {
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(13, 148, 136, 0.08), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(217, 119, 6, 0.06), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.06), transparent 50%);
+}
+.theme-noon.dark.pattern-bg {
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(20, 184, 166, 0.12), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(251, 191, 36, 0.1), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(45, 212, 191, 0.1), transparent 50%);
+}
+
+/* Evening Theme */
+.theme-evening.pattern-bg {
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(245, 158, 11, 0.1), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(225, 29, 72, 0.08), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(13, 148, 136, 0.08), transparent 50%);
+}
+.theme-evening.dark.pattern-bg {
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(245, 158, 11, 0.12), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(225, 29, 72, 0.1), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(13, 148, 136, 0.1), transparent 50%);
+}
+
+/* Night Theme */
+.theme-night.pattern-bg {
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(49, 46, 129, 0.15), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(13, 148, 136, 0.1), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(88, 28, 135, 0.1), transparent 50%);
+}
+.theme-night.dark.pattern-bg {
+    background: 
+        radial-gradient(circle at 15% 50%, rgba(30, 27, 75, 0.3), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(15, 118, 110, 0.2), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(88, 28, 135, 0.2), transparent 50%);
+}
+
 .pattern-bg {
-    background-image: linear-gradient(180deg, rgba(20, 108, 90, 0.04), transparent 260px);
+    background-color: var(--bg-main);
     background-attachment: fixed;
+    transition: background-color var(--transition-smooth), background var(--transition-slow);
 }
 
 /* ═══════════════════════════════════════════
    GLASSMORPHISM COMPONENTS
    ═══════════════════════════════════════════ */
-.glass-panel {
+.glass-panel, .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: var(--glass-shadow);
-    border-radius: 10px;
+    border-radius: 16px;
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
 }
 
-.glass-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+.dark .glass-panel, .dark .glass-card {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .glass-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 18px rgba(23, 33, 30, 0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(13, 148, 136, 0.1);
+    border-color: rgba(13, 148, 136, 0.2);
+}
+
+.dark .glass-card:hover {
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+    border-color: rgba(20, 184, 166, 0.3);
 }
 
 /* ═══════════════════════════════════════════
@@ -306,17 +371,31 @@ html, body {
 .zikr-card {
     position: relative;
     overflow: hidden;
-    background: var(--bg-surface);
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
-    border-radius: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: var(--glass-shadow);
+    border-radius: 16px;
     padding: 22px;
     margin-bottom: 18px;
     transition: all var(--transition-smooth);
 }
 
+.dark .zikr-card {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .zikr-card.completed {
     border-color: var(--success);
-    background: linear-gradient(135deg, var(--bg-surface) 0%, rgba(16, 185, 129, 0.08) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(16, 185, 129, 0.15) 100%);
+}
+
+.dark .zikr-card.completed {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(16, 185, 129, 0.15) 100%);
 }
 
 .zikr-card.is-highlighted {
@@ -376,14 +455,23 @@ html, body {
    PROGRESS HERO
    ═══════════════════════════════════════════ */
 .progress-hero {
-    background: var(--bg-surface);
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
-    border-radius: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
     padding: 24px;
     color: var(--text-primary);
     margin-bottom: 24px;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--glass-shadow);
+}
+.dark .progress-hero {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .progress-hero::after {
@@ -391,18 +479,28 @@ html, body {
 }
 
 .prayer-time-card {
-    background: var(--bg-surface);
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
-    border-radius: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
     color: var(--text-primary);
     padding: 18px;
     box-shadow: var(--glass-shadow);
-    transition: border-color var(--transition-fast), transform var(--transition-fast);
+    transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.dark .prayer-time-card {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .prayer-time-card:hover {
-    border-color: rgba(20, 108, 90, 0.28);
-    transform: translateY(-1px);
+    border-color: rgba(13, 148, 136, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(13, 148, 136, 0.08);
 }
 
 .prayer-time-icon {

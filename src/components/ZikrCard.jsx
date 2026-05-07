@@ -14,6 +14,7 @@ const ZikrCard = ({
     isAnimating,
     isHighlighted,
     language,
+    arabicFontSize = 100,
     onToggleBenefit,
     onToggleComplete,
     onProgress
@@ -98,11 +99,14 @@ const ZikrCard = ({
 
                 {/* Arabic text */}
                 <div className="relative py-2">
-                    <p className={`text-arabic font-amiri transition-all duration-500 ${
-                        isCompleted
-                            ? "text-[var(--text-tertiary)] opacity-80"
-                            : "text-[var(--text-primary)]"
-                    }`}>
+                    <p 
+                        className={`text-arabic font-amiri transition-all duration-500 ${
+                            isCompleted
+                                ? "text-[var(--text-tertiary)] opacity-80"
+                                : "text-[var(--text-primary)]"
+                        }`}
+                        style={{ fontSize: `clamp(${1.25 * (arabicFontSize / 100)}rem, ${3 * (arabicFontSize / 100)}vw, ${1.75 * (arabicFontSize / 100)}rem)` }}
+                    >
                         {zikr.text}
                     </p>
                 </div>

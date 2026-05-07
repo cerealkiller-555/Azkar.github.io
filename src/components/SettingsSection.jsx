@@ -7,7 +7,8 @@ const SettingsSection = ({
     isDarkMode, toggleDarkMode,
     resetAllProgress,
     userProfile, updateProfile, logout,
-    language, setLanguage, t
+    language, setLanguage, t,
+    arabicFontSize, setArabicFontSize
 }) => (
     <div className="animate-slide-up space-y-6">
         {/* PWA Install */}
@@ -74,6 +75,21 @@ const SettingsSection = ({
                     <Globe className="w-5 h-5 text-[var(--primary)]" />
                     {t.languageTitle}
                 </h3>
+
+                <div className="space-y-3 pb-3 border-b border-glass-border">
+                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-wide text-text-secondary">
+                        <span className="text-xs">A</span>
+                        <span>{arabicFontSize}%</span>
+                        <span className="text-lg">A</span>
+                    </div>
+                    <input 
+                        type="range" min="70" max="150" step="5" 
+                        value={arabicFontSize} 
+                        onChange={(e) => setArabicFontSize(parseInt(e.target.value))} 
+                        className="w-full accent-[var(--primary)] cursor-pointer"
+                    />
+                </div>
+
                 <div className="grid grid-cols-2 gap-3">
                     <button onClick={() => setLanguage("ar")} className={`py-3 rounded-lg text-sm font-black border transition-all ${language === "ar" ? "bg-[var(--primary)] text-white border-[var(--primary)]" : "bg-bg-subtle text-text-secondary border-glass-border hover:border-[var(--primary)]"}`}>
                         العربية

@@ -55,6 +55,7 @@ const AzkarApp = () => {
     // ───────────────────────────────────────
     const [isOffline, setIsOffline]       = useState(!navigator.onLine);
     const [isDarkMode, setIsDarkMode]     = useState(() => localStorage.getItem("azkarDarkMode") === "true");
+    const [arabicFontSize, setArabicFontSize] = useState(() => parseInt(localStorage.getItem("azkar_fontSize")) || 100);
     const [language, setLanguage]         = useState(() => localStorage.getItem("azkar_language") || "ar");
     const [activeTab, setActiveTab]       = useState(() => localStorage.getItem("azkar_activeTab") || "morning");
     const [userProfile, setUserProfile]   = useState(() => readJson("azkar_user", { name: "", email: "" }));
@@ -94,6 +95,14 @@ const AzkarApp = () => {
     );
 
     const t = useMemo(() => I18N[language] || I18N.ar, [language]);
+
+    const timeOfDayTheme = useMemo(() => {
+        const hour = currentTime.getHours();
+        if (hour >= 4 && hour < 10) return "theme-morning";
+        if (hour >= 10 && hour < 15) return "theme-noon";
+        if (hour >= 15 && hour < 19) return "theme-evening";
+        return "theme-night";
+    }, [currentTime]);
 
     const currentAzkarList = useMemo(() => {
         const map = {
@@ -233,7 +242,12 @@ const AzkarApp = () => {
         azkarProgressRef.current = updatedProgress;
         setAzkarProgress(updatedProgress);
 
-        if (next < max) return;
+        if (next < max) {
+            if (navigator.vibrate) navigator.vibrate(40);
+            return;
+        } else {
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        }
 
         const updatedCompleted = { ...completedAzkarRef.current, [id]: true };
         completedAzkarRef.current = updatedCompleted;
@@ -343,6 +357,7 @@ const AzkarApp = () => {
         document.documentElement.classList.toggle("dark", isDarkMode);
     }, [isDarkMode]);
     useEffect(() => { localStorage.setItem("azkar_language", language); }, [language]);
+    useEffect(() => { localStorage.setItem("azkar_fontSize", arabicFontSize.toString()); }, [arabicFontSize]);
     useEffect(() => { writeJson("azkar_location", location); }, [location]);
 
     // Clock tick
@@ -404,7 +419,12 @@ const AzkarApp = () => {
     // ───────────────────────────────────────
     const renderAzkarList = (list, type) => (
         <div className="space-y-6">
-            {list.map((z, i) => {
+            {!storageReady ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                    <div key={`skel-${i}`} className="glass-card h-48 rounded-2xl animate-pulse bg-white/20 dark:bg-slate-800/20" />
+                ))
+            ) : (
+            list.map((z, i) => {
                 const uid = `${type}_${z.id}`;
                 return (
                     <ZikrCard
@@ -420,12 +440,13 @@ const AzkarApp = () => {
                         isAnimating={countAnimation === uid}
                         isHighlighted={highlightedZikr === uid}
                         isExpanded={!!expandedBenefits[uid]}
+                        arabicFontSize={arabicFontSize}
                         onToggleBenefit={() => setExpandedBenefits((p) => ({ ...p, [uid]: !p[uid] }))}
                         onToggleComplete={() => toggleZikrComplete(uid, z.count)}
                         onProgress={() => handleZikrProgress(uid, z.count, list, type)}
                     />
                 );
-            })}
+            }))}
         </div>
     );
 
@@ -438,7 +459,7 @@ const AzkarApp = () => {
 
     return (
         <div
-            className={`min-h-screen transition-all duration-500 pattern-bg ${isDarkMode ? 'dark' : ''}`}
+            className={`min-h-screen transition-all duration-1000 pattern-bg ${isDarkMode ? 'dark' : ''} ${timeOfDayTheme}`}
             dir={language === "ar" ? "rtl" : "ltr"}
         >
             <OfflineBanner offline={isOffline} t={t} />
@@ -474,8 +495,13 @@ const AzkarApp = () => {
 
                 {/* Progress bar in header */}
                 {DAILY_TAB_IDS.includes(activeTab) && (
-                    <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800/50">
-                        <div className="h-full bg-[var(--primary)] transition-all duration-1000 ease-out" style={{ width: `${progressPercentage}%` }} />
+                    <div className="relative">
+                        <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800/50">
+                            <div className="h-full bg-[var(--primary)] transition-all duration-1000 ease-out" style={{ width: `${progressPercentage}%` }} />
+                        </div>
+                        <div className="absolute top-full left-0 right-0 py-1 bg-[var(--glass-bg)] backdrop-blur-md border-b border-[var(--glass-border)] text-center text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] shadow-sm">
+                            {completedCount} / {currentAzkarList.length} {t.doneLabel}
+                        </div>
                     </div>
                 )}
 
@@ -554,6 +580,8 @@ const AzkarApp = () => {
                             deferredPrompt={deferredPrompt}
                             installPWA={() => deferredPrompt?.prompt()}
                             updateProfile={updateUserProfile}
+                            arabicFontSize={arabicFontSize}
+                            setArabicFontSize={setArabicFontSize}
                         />
                     )}
                 </div>
